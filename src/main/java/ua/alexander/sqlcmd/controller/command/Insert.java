@@ -39,15 +39,4 @@ public class Insert implements Command {
         dbManager.insertData(tableName, data);
         view.type(String.format("Record %s was successfully added to the table '%s'.", data, tableName));
     }
-
-    private String[] getCommandRefactored(String command) {
-        String[] refactored = command.split("[,]");
-        String[] buffer = refactored[0].split("[:]");
-        if (buffer.length == 2) {
-            refactored[0] = buffer[1];
-        } else {
-            return new String[0];
-        }
-        return refactored;
-    }
 }

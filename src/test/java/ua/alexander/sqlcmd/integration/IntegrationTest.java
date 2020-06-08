@@ -49,7 +49,7 @@ public class IntegrationTest {
                 "\thelp - to see all commands available.\r\n" +
                 "\tconnect:database,username,password  - to connect to a certain database\r\n" +
                 "\tlist -  to get all table names of the database you are connected to.\r\n" +
-                "\tinsert:tableName|column1|value1|column2|value2|...|columnN|valueN - to make a new record in the table\r\n" +
+                "\tinsert:tableName,column1,value1,column2,value2,...,columnN,valueN - to make a new record in the table\r\n" +
                 "\tfind:tableName - to draw the table\r\n" +
                 "\tclear:tableName - to clear table's content\r\n" +
                 "\texit - to shut down the program.\r\n" +
@@ -127,6 +127,7 @@ public class IntegrationTest {
     public void testFind() {
         in.add("connect:sqlcmd,postgres,1234");
         in.add("clear:user");
+        in.add("y");
         in.add("insert:user,id,20,username,d,password,1234");
         in.add("insert:user,id,8,username,s,password,4321");
         in.add("find:user");
@@ -140,6 +141,7 @@ public class IntegrationTest {
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
                 //clear
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
                 "Table 'user' was cleared successfully!\r\n" +
                 //find
                 "Record names:[id, username, password]\n" +
@@ -160,6 +162,7 @@ public class IntegrationTest {
     public void testFindError() {
         in.add("connect:sqlcmd,postgres,1234");
         in.add("clear:user");
+        in.add("y");
         in.add("insert:user,id,20,username,d,password,1234");
         in.add("find:");
         in.add("exit");
@@ -172,6 +175,7 @@ public class IntegrationTest {
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
                 //clear
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
                 "Table 'user' was cleared successfully!\r\n" +
                 //find
                 "Record names:[id, username, password]\n" +
@@ -186,6 +190,7 @@ public class IntegrationTest {
     public void testInsertError() {
         in.add("connect:sqlcmd,postgres,1234");
         in.add("clear:user");
+        in.add("y");
         in.add("insert:user,id,20,username,d,password");
         in.add("insert:");
 
@@ -199,6 +204,7 @@ public class IntegrationTest {
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
                 //clear
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
                 "Table 'user' was cleared successfully!\r\n" +
                 //insert
                 "\u001B[31mFailed, the reason is: Some parameters are missing. The command should look like that: \n" +
@@ -210,6 +216,33 @@ public class IntegrationTest {
                 //exit
                 "See ya!\r\n", out.getData());
     }
+
+    @Test
+    public void testInsert() {
+        in.add("connect:sqlcmd,postgres,1234");
+        in.add("clear:user");
+        in.add("y");
+        in.add("insert:user,id,20,username,d,password,z");
+
+        in.add("exit");
+
+        Main.main(new String[0]);
+
+        assertEquals("Hi, friend! Please insert database name, username and password. " +
+                "Format: connect:database,username,password\r\n" +
+                //connect
+                "\u001B[34mSuccess!\u001B[0m\r\n" +
+                "Please enter your command! Type 'help' to see available commands.\r\n" +
+                //clear
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
+                "Table 'user' was cleared successfully!\r\n" +
+                //insert
+                "Record names:[id, username, password]\n" +
+                "values:[20, d, z] was successfully added to the table 'user'.\r\n" +
+                //exit
+                "See ya!\r\n", out.getData());
+    }
+
 
 
     @Test
@@ -255,6 +288,7 @@ public class IntegrationTest {
     public void testClear() {
         in.add("connect:sqlcmd,postgres,1234");
         in.add("clear:user");
+        in.add("y");
         in.add("exit");
 
         Main.main(new String[0]);
@@ -264,6 +298,8 @@ public class IntegrationTest {
                 //error
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
+                //verification
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
                 "Table 'user' was cleared successfully!\r\n" +
                 //exit
                 "See ya!\r\n", out.getData());
@@ -274,6 +310,7 @@ public class IntegrationTest {
         in.add("connect:sqlcmd,postgres,1234");
         in.add("clear:");
         in.add("clear:gf");
+        in.add("y");
         in.add("exit");
 
         Main.main(new String[0]);
@@ -285,10 +322,32 @@ public class IntegrationTest {
                 //error 1
                 "[31mFailed, the reason is: Something is missing... Quantity of parameters is 1 ,but you need 2[0m\n" +
                 "Try again!\r\n" +
+                //verification
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
                 //error 2
-                "\u001B[31mFailed, the reason is: ERROR: relation \"public.gf\" does not exist\n" +
-                "  Position: 13\u001B[0m\n" +
+                "[31mFailed, the reason is: Can't clear table 'gf' ERROR: relation \"public.gf\" does not exist[0m\n"+
                 "Try again!\r\n" +
+                //exit
+                "See ya!\r\n", out.getData());
+    }
+
+    @Test
+    public void testClearDiscardDeletion() {
+        in.add("connect:sqlcmd,postgres,1234");
+        in.add("clear:user");
+        in.add("n");
+        in.add("exit");
+
+        Main.main(new String[0]);
+
+        assertEquals("Hi, friend! Please insert database name, username and password. " +
+                "Format: connect:database,username,password\r\n" +
+                //error
+                "\u001B[34mSuccess!\u001B[0m\r\n" +
+                "Please enter your command! Type 'help' to see available commands.\r\n" +
+                //verification
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
+                "Table 'user' wasn't cleared.\r\n" +
                 //exit
                 "See ya!\r\n", out.getData());
     }

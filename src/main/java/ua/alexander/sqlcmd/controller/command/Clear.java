@@ -3,6 +3,8 @@ package ua.alexander.sqlcmd.controller.command;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
+import java.util.Scanner;
+
 public class Clear implements Command {
     private static final String COMMAND_SAMPLE = "clear:user";
     private DataBaseManager dbManager;
@@ -27,8 +29,29 @@ public class Clear implements Command {
                     " ,but you need " + getParameterLength());
         }
         String tableName = data[1];
-        dbManager.clearTable(tableName);
-        view.type(String.format("Table '%s' was cleared successfully!", tableName));
+        if(clearVerification()){
+            dbManager.clearTable(tableName);
+            view.type(String.format("Table '%s' was cleared successfully!", tableName));
+        }else{
+            view.type(String.format("Table '%s' wasn't cleared.", tableName));
+        }
+
+    }
+
+    public boolean clearVerification(){
+        view.type("Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard");
+        Scanner scanner = new Scanner(System.in);
+        while(true) {
+            String command = scanner.nextLine();
+            if (command.equals("y")) {
+                return true;
+            } else if (command.equals("n")) {
+                return false;
+            } else if (command.equals("exit")) {
+                throw new ExitException();
+            }
+            view.type("Wrong format!");
+        }
     }
 
     private int getParameterLength() {

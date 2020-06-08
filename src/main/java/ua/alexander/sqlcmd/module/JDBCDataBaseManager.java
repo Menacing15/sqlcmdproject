@@ -92,22 +92,24 @@ public class JDBCDataBaseManager implements DataBaseManager {
         {
             statement.executeUpdate(String.format("DELETE FROM public.%s", tableName));
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            String [] message = e.getMessage().split("[\n]");
+            throw new RuntimeException(String.format("Can't clear table '%s' ",tableName) + message[0]);
         }
     }
 
 
     public void insertData(String tableName, Data input) {
+        String tableNames = formatNames(input, "%s,");
+        String values = formatValues(input,"'%s',");
         try (Statement statement = connection.createStatement())
         {
-            String tableNames = formatNames(input, "%s,");
-            String values = formatValues(input,"'%s',");
             statement.executeUpdate(String.format("INSERT INTO public."+ tableName +"(%s)VALUES (%s)", tableNames, values));
         }
          catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+             String [] message = e.getMessage().split("[\n]");
+             throw new RuntimeException(String.format("Can't insert in table '%s'. " +
+                     "Column names: '%s', values %s ",tableName,tableNames, values) + message[0]);
+         }
     }
 
     public void updateTableData(String tableName, Data updatedValue, int id){
