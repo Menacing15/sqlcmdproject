@@ -10,7 +10,7 @@ public class Clear implements Command {
     private DataBaseManager dbManager;
     private View view;
 
-    public Clear(View view, DataBaseManager dbManager) { //TODO проверка при вызове комманды
+    public Clear(View view, DataBaseManager dbManager) {
         this.view = view;
         this.dbManager = dbManager;
     }
@@ -22,21 +22,12 @@ public class Clear implements Command {
 
     @Override
     public void execute(String command) {
-        String[] data = command.split("[:]");
-
-        if (data.length  != getParameterLength()) {
-            throw new IllegalArgumentException("Something is missing... Quantity of parameters is " + data.length +
-                    " ,but you need " + getParameterLength());
-        }
-        String tableName = data[1];
-        if(clearVerification()){
-            dbManager.clearTable(tableName);
-            view.type(String.format("Table '%s' was cleared successfully!", tableName));
-        }else{
-            view.type(String.format("Table '%s' wasn't cleared.", tableName));
-        }
-
+        if(clearVerification())
+            processClearing(command);
+        else
+            view.type("Table wasn't cleared.");
     }
+
 
     public boolean clearVerification(){
         view.type("Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard");
@@ -52,6 +43,17 @@ public class Clear implements Command {
             }
             view.type("Wrong format!");
         }
+    }
+    public void processClearing(String command){
+        String[] data = command.split("[:]");
+
+        if (data.length  != getParameterLength()) {
+            throw new IllegalArgumentException("Something is missing... Quantity of parameters is " + data.length +
+                    " ,but you need " + getParameterLength());
+        }
+        String tableName = data[1];
+        dbManager.clearTable(tableName);
+        view.type(String.format("Table '%s' was cleared successfully!", tableName));
     }
 
     private int getParameterLength() {

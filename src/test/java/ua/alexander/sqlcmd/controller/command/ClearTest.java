@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 public class ClearTest {
     private DataBaseManager dbManager;
     private View view;
-    private Command command;
+    private Clear command;
 
     @Before
     public void setup() {
@@ -35,7 +35,7 @@ public class ClearTest {
 
     @Test
     public void testClearTable() {
-        command.execute("clear:user");
+        command.processClearing("clear:user");
         Mockito.verify(dbManager).clearTable("user");
         Mockito.verify(view).type("Table 'user' was cleared successfully!");
     }
@@ -43,12 +43,12 @@ public class ClearTest {
     @Test
     public void testClearTableWrongParameters() {
         try {
-            command.execute("clear:");
+            command.processClearing("clear:user");
         }catch(IllegalArgumentException e){
             assertEquals("Something is missing... Quantity of parameters is 1 ,but you need 2", e.getMessage());
         }
         try {
-            command.execute("clear:clear:user");
+            command.processClearing("clear:user");
         }catch(IllegalArgumentException e){
             assertEquals("Something is missing... Quantity of parameters is 3 ,but you need 2", e.getMessage());
         }

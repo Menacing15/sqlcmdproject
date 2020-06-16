@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class ExitTest {
     private View view = Mockito.mock(View.class);
     @Test
-    public void testProcessAble(){
+    public void testProcessAbleExit(){
         Command command = new Exit(view);
         boolean processAble = command.processAble("exit");
         assertTrue(processAble);

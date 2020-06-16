@@ -10,7 +10,6 @@ import ua.alexander.sqlcmd.controller.Main;
 import java.io.PrintStream;
 
 public class IntegrationTest {
-
     private ConfigurableInputStream in;
     private LogOutputStream out;
 
@@ -187,6 +186,32 @@ public class IntegrationTest {
     }
 
     @Test
+    public void testInsert() {
+        in.add("connect:sqlcmd,postgres,1234");
+        in.add("clear:user");
+        in.add("y");
+        in.add("insert:user,id,20,username,d,password,z");
+
+        in.add("exit");
+
+        Main.main(new String[0]);
+
+        assertEquals("Hi, friend! Please insert database name, username and password. " +
+                "Format: connect:database,username,password\r\n" +
+                //connect
+                "\u001B[34mSuccess!\u001B[0m\r\n" +
+                "Please enter your command! Type 'help' to see available commands.\r\n" +
+                //clear
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
+                "Table 'user' was cleared successfully!\r\n" +
+                //insert
+                "Record names:[id, username, password]\n" +
+                "values:[20, d, z] was successfully added to the table 'user'.\r\n" +
+                //exit
+                "See ya!\r\n", out.getData());
+    }
+
+    @Test
     public void testInsertError() {
         in.add("connect:sqlcmd,postgres,1234");
         in.add("clear:user");
@@ -217,32 +242,6 @@ public class IntegrationTest {
                 "See ya!\r\n", out.getData());
     }
 
-    @Test
-    public void testInsert() {
-        in.add("connect:sqlcmd,postgres,1234");
-        in.add("clear:user");
-        in.add("y");
-        in.add("insert:user,id,20,username,d,password,z");
-
-        in.add("exit");
-
-        Main.main(new String[0]);
-
-        assertEquals("Hi, friend! Please insert database name, username and password. " +
-                "Format: connect:database,username,password\r\n" +
-                //connect
-                "\u001B[34mSuccess!\u001B[0m\r\n" +
-                "Please enter your command! Type 'help' to see available commands.\r\n" +
-                //clear
-                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
-                "Table 'user' was cleared successfully!\r\n" +
-                //insert
-                "Record names:[id, username, password]\n" +
-                "values:[20, d, z] was successfully added to the table 'user'.\r\n" +
-                //exit
-                "See ya!\r\n", out.getData());
-    }
-
 
 
     @Test
@@ -264,25 +263,6 @@ public class IntegrationTest {
                 "See ya!\r\n", out.getData());
     }
 
-
-    @Test
-    public void testUnsupported() {
-        in.add("connect:sqlcmd,postgres,1234");
-        in.add("unsupported");
-        in.add("exit");
-
-        Main.main(new String[0]);
-
-        assertEquals("Hi, friend! Please insert database name, username and password. " +
-                "Format: connect:database,username,password\r\n" +
-                //connect
-                "\u001B[34mSuccess!\u001B[0m\r\n" +
-                "Please enter your command! Type 'help' to see available commands.\r\n" +
-                //unsupported
-                "Sorry, such command doesn't exist! Try again!\r\n" +
-                //exit
-                "See ya!\r\n", out.getData());
-    }
 
     @Test
     public void testClear() {
@@ -309,6 +289,7 @@ public class IntegrationTest {
     public void testClearError() {
         in.add("connect:sqlcmd,postgres,1234");
         in.add("clear:");
+        in.add("y");
         in.add("clear:gf");
         in.add("y");
         in.add("exit");
@@ -319,6 +300,8 @@ public class IntegrationTest {
                 "Format: connect:database,username,password\r\n" +
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
+                //verification
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
                 //error 1
                 "[31mFailed, the reason is: Something is missing... Quantity of parameters is 1 ,but you need 2[0m\n" +
                 "Try again!\r\n" +
@@ -347,7 +330,26 @@ public class IntegrationTest {
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
                 //verification
                 "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
-                "Table 'user' wasn't cleared.\r\n" +
+                "Table wasn't cleared.\r\n" +
+                //exit
+                "See ya!\r\n", out.getData());
+    }
+
+    @Test
+    public void testUnsupported() {
+        in.add("connect:sqlcmd,postgres,1234");
+        in.add("unsupported");
+        in.add("exit");
+
+        Main.main(new String[0]);
+
+        assertEquals("Hi, friend! Please insert database name, username and password. " +
+                "Format: connect:database,username,password\r\n" +
+                //connect
+                "\u001B[34mSuccess!\u001B[0m\r\n" +
+                "Please enter your command! Type 'help' to see available commands.\r\n" +
+                //unsupported
+                "Sorry, such command doesn't exist! Try again!\r\n" +
                 //exit
                 "See ya!\r\n", out.getData());
     }
