@@ -2,13 +2,14 @@ package ua.alexander.sqlcmd.controller.command;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
+
 
 public class ConnectTest {
     private DataBaseManager dbManager;
@@ -37,9 +38,9 @@ public class ConnectTest {
     @Test
     public void testConnect(){
         command.execute("connect:sqlcmd,postgres,1234");
-        Mockito.verify(dbManager).connect("sqlcmd","postgres","1234");
-        Mockito.verify(view).type("\u001B[34m" + "Success!" + "\u001B[0m");
-        Mockito.verify(view).type("Please enter your command! Type 'help' to see available commands.");
+        verify(dbManager).connect("sqlcmd","postgres","1234");
+        verify(view).type("\u001B[34m" + "Success!" + "\u001B[0m");
+        verify(view).type("Please enter your command! Type 'help' to see available commands.");
     }
 
     @Test
@@ -53,7 +54,7 @@ public class ConnectTest {
 
     @Test(expected=RuntimeException.class)
     public void testConnectWrongPassword() {
-        Mockito.doThrow(RuntimeException.class).
+        doThrow(RuntimeException.class).
                 when(dbManager).connect("sqlcmd","postgres","wrongPassword");
         dbManager.connect("sqlcmd","postgres","wrongPassword");
 

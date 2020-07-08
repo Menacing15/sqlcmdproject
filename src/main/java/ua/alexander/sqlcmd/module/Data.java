@@ -1,6 +1,9 @@
 package ua.alexander.sqlcmd.module;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public class Data {
     static class MetaData {
@@ -21,26 +24,29 @@ public class Data {
         }
     }
 
-    public MetaData[] data = new MetaData[100]; // TODO remove magic number 100
-    public int index = 0;
+    List<MetaData> metaData = new ArrayList<>();
+    int index = 0;
 
     public void put(String name, Object value){
-        data[index++] = new MetaData(name, value);
+        metaData.add(new MetaData(name, value));
+        index++;
     }
 
 
     public Object[] getValues() {
         Object[] result = new Object[index];
-        for (int i = 0; i < index; i++) {
-            result[i] = data[i].getValue();
+        int index = 0;
+        for (MetaData element : metaData) {
+            result[index++] = element.getValue();
         }
         return result;
     }
 
     public String[] getNames() {
         String[] result = new String[index];
-        for (int i = 0; i < index; i++) {
-            result[i] = data[i].getName();
+        int index = 0;
+        for (MetaData element : metaData) {
+            result[index++] = element.getName();
         }
         return result;
     }
@@ -53,4 +59,27 @@ public class Data {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Data) {
+            Data passedData = (Data) o;
+            if(metaData.size() == passedData.metaData.size()) {
+                Iterator<MetaData> passedIter = passedData.metaData.iterator();
+                for (MetaData md : metaData) {
+                    MetaData next = passedIter.next();
+                    if (!(md.getName().equals(next.getName()) &&
+                           md.getValue().equals(next.getValue()))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(metaData.toArray());
+    }
 }
