@@ -54,9 +54,9 @@ public abstract class DataBaseManagerTest {
 
     @Test
     public void testGetTableHeader(){
-        String[] columnNames = jdbcDBManager.getTableColumnNames("user");
-        System.out.println(Arrays.toString(columnNames));
-        assertEquals("[id, username, password]", Arrays.toString(columnNames));
+        Set<String> columnNames = jdbcDBManager.getTableColumnNames("user");
+        System.out.println(columnNames);
+        assertEquals("[id, username, password]", columnNames.toString());
     }
 
     @Test

@@ -9,7 +9,7 @@ public interface DataBaseManager {
 
     Data[] getTableData(String tableName);
 
-    String [] getTableColumnNames(String tableName);
+    Set<String> getTableColumnNames(String tableName);
 
     void clearTable(String tableName);
 

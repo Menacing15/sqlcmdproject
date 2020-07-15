@@ -4,6 +4,8 @@ import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
+import java.util.Set;
+
 public class Find implements Command {
     private static final String COMMAND_SAMPLE = "find:user";
     private DataBaseManager dbManager;
@@ -29,9 +31,9 @@ public class Find implements Command {
             }
             String tableName = data[1];
 
-            String[] tableColumns = dbManager.getTableColumnNames(tableName);
+            Set<String> tableColumns = dbManager.getTableColumnNames(tableName);
 
-            if (tableColumns.length != 0) {
+            if (tableColumns.size() != 0) {
                 drawHeader(tableColumns);
                 Data[] tableData = dbManager.getTableData(tableName);
                 drawTable(tableData);
@@ -58,7 +60,7 @@ public class Find implements Command {
         view.type(result);
     }
 
-    private void drawHeader(String[] tableColumns) {
+    private void drawHeader(Set <String> tableColumns) {
         String result = "|";
         for (String name : tableColumns) {
             result += name + "|";

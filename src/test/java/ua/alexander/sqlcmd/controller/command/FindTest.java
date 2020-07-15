@@ -8,6 +8,9 @@ import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -38,7 +41,7 @@ public class FindTest {
     @Test
     public void testPrintTable(){
         when(dbManager.getTableColumnNames("user"))
-                .thenReturn(new String[]{"id","username","password"});
+                .thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
 
         Data data1 = new Data();
         data1.put("id",8);
@@ -68,7 +71,7 @@ public class FindTest {
     @Test
     public void testPrintEmptyTableData() {
         when(dbManager.getTableColumnNames("user"))
-                .thenReturn(new String[]{"id", "username", "password"});
+                .thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
 
         when(dbManager.getTableData("user")).thenReturn(new Data[0]);
         command.execute("find:user");

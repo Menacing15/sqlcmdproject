@@ -42,18 +42,15 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public String [] getTableColumnNames(String tableName) {
+    public Set<String> getTableColumnNames(String tableName) {
+        Set<String> names = new LinkedHashSet<>();
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM INFORMATION_SCHEMA." +
                      "COLUMNS WHERE TABLE_NAME = '%s'", tableName)))
         {
-            int size = getColumnCount(tableName);
-            String[] names = new String[10];
-            int index = 0;
             while(resultSet.next()){
-                names[index++] = resultSet.getString("column_name");
+                names.add(resultSet.getString("column_name"));
             }
-            names = Arrays.copyOf(names, index, String[].class);
             return names;
         }
         catch (SQLException e) {
