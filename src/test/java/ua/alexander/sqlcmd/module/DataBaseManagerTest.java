@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -26,9 +27,9 @@ public abstract class DataBaseManagerTest {
 
     @Test
     public void testGetTableNames() {
-        String[] tableNames = jdbcDBManager.getTableNames();
-        System.out.println(Arrays.toString(tableNames));
-        assertEquals("[user, test]", Arrays.toString(tableNames));
+        Set<String> tableNames = jdbcDBManager.getTableNames();
+        System.out.println(tableNames);
+        assertEquals("[user, test]", tableNames.toString());
 
     }
 

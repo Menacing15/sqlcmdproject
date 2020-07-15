@@ -1,9 +1,11 @@
 package ua.alexander.sqlcmd.module;
 
+import java.util.Set;
+
 public interface DataBaseManager {
     void connect(String database, String user, String password);
 
-    String [] getTableNames();
+    Set<String> getTableNames();
 
     Data[] getTableData(String tableName);
 

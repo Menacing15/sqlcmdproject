@@ -2,6 +2,8 @@ package ua.alexander.sqlcmd.module;
 
 import java.sql.*;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class JDBCDataBaseManager implements DataBaseManager {
     private Connection connection;
@@ -23,21 +25,19 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
     }
 
-    public String [] getTableNames(){
+    public Set<String> getTableNames(){
+        Set<String> tables = new LinkedHashSet<>();
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(String.format("SELECT table_name FROM information_schema.tables " +
-                "WHERE table_type = 'BASE TABLE' AND table_schema = 'public'")))
+                     "WHERE table_type = 'BASE TABLE' AND table_schema = 'public'")))
         {
-            String[] tables = new String [10];
-            int index = 0;
             while(resultSet.next()){
-                tables[index++] = resultSet.getString("table_name");
+                tables.add(resultSet.getString("table_name"));
             }
-            tables = Arrays.copyOf(tables, index, String[].class);
             return tables;
         } catch (SQLException e) {
             e.printStackTrace();
-            return new String[0];
+            return tables;
         }
     }
 

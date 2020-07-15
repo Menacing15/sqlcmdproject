@@ -1,5 +1,6 @@
 package ua.alexander.sqlcmd.integration;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,8 +11,8 @@ import ua.alexander.sqlcmd.controller.Main;
 import java.io.PrintStream;
 
 public class IntegrationTest {
-    private ConfigurableInputStream in;
-    private LogOutputStream out;
+    private static ConfigurableInputStream in;
+    private static LogOutputStream out;
 
     @Before
     public void setup() {
@@ -21,6 +22,18 @@ public class IntegrationTest {
         System.setIn(in);
         System.setOut(new PrintStream(out));
     }
+
+    @After
+    public void clearAll(){
+        in.add("connect:sqlcmd,postgres,1234");
+        in.add("clear:user");
+        in.add("y");
+        in.add("exit");
+
+        Main.main(new String[0]);
+    }
+
+
 
     @Test
     public void testExit() {
@@ -125,8 +138,6 @@ public class IntegrationTest {
     @Test
     public void testFind() {
         in.add("connect:sqlcmd,postgres,1234");
-        in.add("clear:user");
-        in.add("y");
         in.add("insert:user,id,20,username,d,password,1234");
         in.add("insert:user,id,8,username,s,password,4321");
         in.add("find:user");
@@ -139,14 +150,12 @@ public class IntegrationTest {
                 //connect
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
-                //clear
-                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
-                "Table 'user' was cleared successfully!\r\n" +
-                //find
+                //insert
                 "Record names:[id, username, password]\n" +
                 "values:[20, d, 1234] was successfully added to the table 'user'.\r\n" +
                 "Record names:[id, username, password]\n" +
                 "values:[8, s, 4321] was successfully added to the table 'user'.\r\n" +
+                //find
                 "|-----------------------|\r\n" +
                 "|id|username|password|\r\n" +
                 "|-----------------------|\r\n" +
@@ -160,8 +169,6 @@ public class IntegrationTest {
     @Test
     public void testFindError() {
         in.add("connect:sqlcmd,postgres,1234");
-        in.add("clear:user");
-        in.add("y");
         in.add("insert:user,id,20,username,d,password,1234");
         in.add("find:");
         in.add("exit");
@@ -173,12 +180,10 @@ public class IntegrationTest {
                 //connect
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
-                //clear
-                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
-                "Table 'user' was cleared successfully!\r\n" +
-                //find
+                //insert
                 "Record names:[id, username, password]\n" +
                 "values:[20, d, 1234] was successfully added to the table 'user'.\r\n" +
+                //find
                 "\u001B[31mFailed, the reason is: Something is missing... Quantity of parameters is 1 ,but you need 2\u001B[0m\n" +
                 "Try again!\r\n" +
                 //exit
@@ -188,10 +193,7 @@ public class IntegrationTest {
     @Test
     public void testInsert() {
         in.add("connect:sqlcmd,postgres,1234");
-        in.add("clear:user");
-        in.add("y");
         in.add("insert:user,id,20,username,d,password,z");
-
         in.add("exit");
 
         Main.main(new String[0]);
@@ -201,9 +203,6 @@ public class IntegrationTest {
                 //connect
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
-                //clear
-                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
-                "Table 'user' was cleared successfully!\r\n" +
                 //insert
                 "Record names:[id, username, password]\n" +
                 "values:[20, d, z] was successfully added to the table 'user'.\r\n" +
@@ -214,8 +213,6 @@ public class IntegrationTest {
     @Test
     public void testInsertError() {
         in.add("connect:sqlcmd,postgres,1234");
-        in.add("clear:user");
-        in.add("y");
         in.add("insert:user,id,20,username,d,password");
         in.add("insert:");
 
@@ -228,9 +225,6 @@ public class IntegrationTest {
                 //connect
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
-                //clear
-                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
-                "Table 'user' was cleared successfully!\r\n" +
                 //insert
                 "\u001B[31mFailed, the reason is: Some parameters are missing. The command should look like that: \n" +
                 "'insert:tableName,column1,value1,column2,value2...columnN,valueN', but your is: 'insert:user,id,20,username,d,password'\u001B[0m\n" +
@@ -353,6 +347,5 @@ public class IntegrationTest {
                 //exit
                 "See ya!\r\n", out.getData());
     }
-
 
 }
