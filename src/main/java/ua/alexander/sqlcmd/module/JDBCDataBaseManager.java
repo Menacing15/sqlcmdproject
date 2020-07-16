@@ -1,9 +1,7 @@
 package ua.alexander.sqlcmd.module;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class JDBCDataBaseManager implements DataBaseManager {
     private Connection connection;
@@ -60,17 +58,15 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
 
-    public Data[] getTableData(String tableName) {
+    public List<Data> getTableData(String tableName) {
+        List<Data> output = new ArrayList<>();
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM public.%s", tableName)))
         {
-            int size = getColumnCount(tableName);
             ResultSetMetaData resultSetMD = resultSet.getMetaData();
-            Data[] output = new Data[size];
-            int index = 0;
             while(resultSet.next()){
                 Data data = new Data();
-                output[index++] = data;
+                output.add(data);
                 for(int i = 1; i <= resultSetMD.getColumnCount(); i++) {
                     data.put(resultSetMD.getColumnName(i), resultSet.getObject(i));
                 }
@@ -79,7 +75,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.println(message);
-            return null;
+            return output;
         }
     }
 

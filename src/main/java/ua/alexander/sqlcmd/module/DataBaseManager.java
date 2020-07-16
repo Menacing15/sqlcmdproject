@@ -1,5 +1,6 @@
 package ua.alexander.sqlcmd.module;
 
+import java.util.List;
 import java.util.Set;
 
 public interface DataBaseManager {
@@ -7,7 +8,7 @@ public interface DataBaseManager {
 
     Set<String> getTableNames();
 
-    Data[] getTableData(String tableName);
+    List<Data> getTableData(String tableName);
 
     Set<String> getTableColumnNames(String tableName);
 

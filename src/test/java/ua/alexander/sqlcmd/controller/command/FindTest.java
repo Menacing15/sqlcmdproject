@@ -8,6 +8,7 @@ import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
@@ -53,7 +54,7 @@ public class FindTest {
         data2.put("username","Dana");
         data2.put("password","hopefully");
 
-        Data[] data = new Data[] {data1, data2};
+        java.util.List <Data> data = new ArrayList<>(Arrays.asList(data1,data2));
         when(dbManager.getTableData("user"))
                 .thenReturn(data);
 
@@ -73,7 +74,7 @@ public class FindTest {
         when(dbManager.getTableColumnNames("user"))
                 .thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
 
-        when(dbManager.getTableData("user")).thenReturn(new Data[0]);
+        when(dbManager.getTableData("user")).thenReturn(new ArrayList<>(0));
         command.execute("find:user");
 
         // then

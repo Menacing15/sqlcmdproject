@@ -43,13 +43,13 @@ public abstract class DataBaseManagerTest {
         input.put("password", "qwerty");
         jdbcDBManager.insertData("user", input);
 
-        Data[] users = jdbcDBManager.getTableData("user");
-        Data user = users[0];
+        java.util.List<Data> users = jdbcDBManager.getTableData("user");
+        Data user = users.get(0);
 
         assertEquals("[id, username, password]", Arrays.toString(user.getNames()));
         assertEquals("[8, Andreev, qwerty]", Arrays.toString(user.getValues()));
 
-        System.out.println("#Table Data:#\n\n" + Arrays.toString(jdbcDBManager.getTableData("user")));
+        System.out.println("#Table Data:#\n\n" + jdbcDBManager.getTableData("user"));
     }
 
     @Test
@@ -73,13 +73,13 @@ public abstract class DataBaseManagerTest {
         update.put("password", "qwerty1234");
         jdbcDBManager.updateTableData("user", update ,8);
 
-        Data[] users = jdbcDBManager.getTableData("user");
-        Data user = users[0];
+        java.util.List<Data> users = jdbcDBManager.getTableData("user");
+        Data user = users.get(0);
 
         assertEquals("[id, username, password]", Arrays.toString(user.getNames()));
         assertEquals("[8, Andreev, qwerty1234]", Arrays.toString(user.getValues()));
 
-        System.out.println("#Updated table#\n\n" + Arrays.toString(jdbcDBManager.getTableData("user")));
+        System.out.println("#Updated table#\n\n" + jdbcDBManager.getTableData("user"));
     }
 
 }

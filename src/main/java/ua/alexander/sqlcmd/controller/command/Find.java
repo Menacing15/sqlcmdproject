@@ -35,7 +35,7 @@ public class Find implements Command {
 
             if (tableColumns.size() != 0) {
                 drawHeader(tableColumns);
-                Data[] tableData = dbManager.getTableData(tableName);
+                java.util.List<Data> tableData = dbManager.getTableData(tableName);
                 drawTable(tableData);
             }
     }
@@ -45,7 +45,7 @@ public class Find implements Command {
     }
 
 
-    private void drawTable(Data[] tableData) {
+    private void drawTable(java.util.List<Data> tableData) {
         for (Data row : tableData) {
             printRow(row);
         }
