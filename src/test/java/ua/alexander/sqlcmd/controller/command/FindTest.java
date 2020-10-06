@@ -3,14 +3,15 @@ package ua.alexander.sqlcmd.controller.command;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
+import ua.alexander.sqlcmd.module.DataImpl;
 import ua.alexander.sqlcmd.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -28,35 +29,33 @@ public class FindTest {
     }
 
     @Test
-    public void testProcessAbleFindWithParametersString() {
+    public void testProcessAbleFindWithParameters() {
         boolean processAble = command.processAble("find:user");
         assertTrue(processAble);
     }
 
     @Test
-    public void testProcessAbleFindWithoutParametersString() {
+    public void testProcessAbleFindWithoutParameters() {
         boolean processAble = command.processAble("find");
         assertFalse(processAble);
     }
 
     @Test
     public void testPrintTable(){
-        when(dbManager.getTableColumnNames("user"))
-                .thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
+        setupTableColumns("user","id", "username", "password");
 
-        Data data1 = new Data();
+        Data data1 = new DataImpl();
         data1.put("id",8);
         data1.put("username","Sasha");
         data1.put("password","ilovedana");
 
-        Data data2 = new Data();
+        Data data2 = new DataImpl();
         data2.put("id",20);
         data2.put("username","Dana");
         data2.put("password","hopefully");
 
-        java.util.List <Data> data = new ArrayList<>(Arrays.asList(data1,data2));
-        when(dbManager.getTableData("user"))
-                .thenReturn(data);
+        List<Data> data = new ArrayList<>(Arrays.asList(data1,data2));
+        when(dbManager.getTableData("user")).thenReturn(data);
 
         command.execute("find:user");
 
@@ -71,8 +70,7 @@ public class FindTest {
 
     @Test
     public void testPrintEmptyTableData() {
-        when(dbManager.getTableColumnNames("user"))
-                .thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
+        setupTableColumns("user","id", "username", "password");
 
         when(dbManager.getTableData("user")).thenReturn(new ArrayList<>(0));
         command.execute("find:user");
@@ -99,10 +97,14 @@ public class FindTest {
 
     }
 
-
     private void shouldPrint(String expected) {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(view, atLeastOnce()).type(captor.capture());
         assertEquals(expected, captor.getAllValues().toString());
+    }
+
+    private void setupTableColumns(String tableName, String... columns) {
+        when(dbManager.getTableColumnNames(tableName))
+                .thenReturn(new LinkedHashSet<>(Arrays.asList(columns)));
     }
 }

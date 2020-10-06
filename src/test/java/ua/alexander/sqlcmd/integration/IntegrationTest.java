@@ -60,7 +60,7 @@ public class IntegrationTest {
                 "There are such commands:\r\n" +
                 "\thelp - to see all commands available.\r\n" +
                 "\tconnect:database,username,password  - to connect to a certain database\r\n" +
-                "\tlist -  to get all table names of the database you are connected to.\r\n" +
+                "\ttables -  to get all table names of the database you are connected to.\r\n" +
                 "\tinsert:tableName,column1,value1,column2,value2,...,columnN,valueN - to make a new record in the table\r\n" +
                 "\tfind:tableName - to draw the table\r\n" +
                 "\tclear:tableName - to clear table's content\r\n" +
@@ -117,7 +117,7 @@ public class IntegrationTest {
 
     @Test
     public void testCommandWithOutConnection() {
-        in.add("list");
+        in.add("tables");
         in.add("find");
         in.add("exit");
 
@@ -125,8 +125,8 @@ public class IntegrationTest {
 
         assertEquals("Hi, friend! Please insert database name, username and password. " +
                 "Format: connect:database,username,password\r\n" +
-                //list
-                "Sorry, but you can't use command 'list' before you connect the database. " +
+                //tables
+                "Sorry, but you can't use command 'tables' before you connect the database. " +
                 "To connect database type 'connect:database,username,password'\r\n" +
                 //find
                 "Sorry, but you can't use command 'find' before you connect the database." +
@@ -239,9 +239,9 @@ public class IntegrationTest {
 
 
     @Test
-    public void testList() {
+    public void testTables() {
         in.add("connect:sqlcmd,postgres,1234");
-        in.add("list");
+        in.add("tables");
         in.add("exit");
 
         Main.main(new String[0]);
@@ -251,7 +251,7 @@ public class IntegrationTest {
                 //connect
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
-                //list
+                //tables
                 "[user, test]\r\n" +
                 //exit
                 "See ya!\r\n", out.getData());
@@ -325,6 +325,47 @@ public class IntegrationTest {
                 //verification
                 "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
                 "Table wasn't cleared.\r\n" +
+                //exit
+                "See ya!\r\n", out.getData());
+    }
+
+    @Test
+    public void testClearWrongVerificationCommandFormat() {
+        in.add("connect:sqlcmd,postgres,1234");
+        in.add("clear:user");
+        in.add("a");
+        in.add("b");
+        in.add("exit");
+
+        Main.main(new String[0]);
+
+        assertEquals("Hi, friend! Please insert database name, username and password. " +
+                "Format: connect:database,username,password\r\n" +
+                //error
+                "\u001B[34mSuccess!\u001B[0m\r\n" +
+                "Please enter your command! Type 'help' to see available commands.\r\n" +
+                //verification
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
+                //exit
+                "See ya!\r\n", out.getData());
+    }
+
+    @Test
+    public void testClearExitFromClearVerification() {
+        in.add("connect:sqlcmd,postgres,1234");
+        in.add("clear:user");
+        in.add("exit");
+
+
+        Main.main(new String[0]);
+
+        assertEquals("Hi, friend! Please insert database name, username and password. " +
+                "Format: connect:database,username,password\r\n" +
+                //error
+                "\u001B[34mSuccess!\u001B[0m\r\n" +
+                "Please enter your command! Type 'help' to see available commands.\r\n" +
+                //verification
+                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
                 //exit
                 "See ya!\r\n", out.getData());
     }

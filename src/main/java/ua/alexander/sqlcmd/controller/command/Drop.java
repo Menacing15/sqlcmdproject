@@ -3,40 +3,40 @@ package ua.alexander.sqlcmd.controller.command;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
-public class Clear implements Command {
-    private static final String COMMAND_SAMPLE = "clear:user";
+public class Drop implements Command {
+    private static final String COMMAND_SAMPLE = "drop:user";
     private DataBaseManager dbManager;
     private View view;
 
-    public Clear(View view, DataBaseManager dbManager) {
+    public Drop(View view, DataBaseManager dbManager) {
         this.view = view;
         this.dbManager = dbManager;
     }
 
     @Override
     public boolean processAble(String command) {
-        return command.startsWith("clear:");
+        return command.startsWith("drop:");
     }
 
     @Override
     public void execute(String command) {
-        view.type("Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard");
+        view.type("Are you sure you want to delete the table? Type 'y' to confirm, 'n' to discard");
         if(verification())
-            executeClearing(command);
+            executeDropping(command);
         else
-            view.type("Table wasn't cleared.");
+            view.type("Table wasn't deleted.");
     }
 
 
-    public void executeClearing(String command){
+    public void executeDropping(String command) {
         String[] data = command.split("[:]");
         if (data.length  != getParameterLength(COMMAND_SAMPLE)) {
             throw new IllegalArgumentException("Something is missing... Quantity of parameters is " + data.length +
                     " ,but you need " + getParameterLength(COMMAND_SAMPLE));
         }
         String tableName = data[1];
-        dbManager.clearTable(tableName);
-        view.type(String.format("Table '%s' was cleared successfully!", tableName));
+        dbManager.dropTable(tableName);
+        view.type(String.format("Table '%s' was deleted successfully!", tableName));
     }
 
 

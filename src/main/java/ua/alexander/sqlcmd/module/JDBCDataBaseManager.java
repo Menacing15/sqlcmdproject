@@ -65,7 +65,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
         {
             ResultSetMetaData resultSetMD = resultSet.getMetaData();
             while(resultSet.next()){
-                Data data = new Data();
+                Data data = new DataImpl();
                 output.add(data);
                 for(int i = 1; i <= resultSetMD.getColumnCount(); i++) {
                     data.put(resultSetMD.getColumnName(i), resultSet.getObject(i));
@@ -87,6 +87,16 @@ public class JDBCDataBaseManager implements DataBaseManager {
         } catch (SQLException e) {
             String [] message = e.getMessage().split("[\n]");
             throw new RuntimeException(String.format("Can't clear table '%s' ",tableName) + message[0]);
+        }
+    }
+
+    public void dropTable(String tableName){
+        try  (Statement statement = connection.createStatement())
+        {
+            statement.executeUpdate(String.format("DROP TABLE public.%s", tableName));
+        } catch (SQLException e) {
+            String [] message = e.getMessage().split("[\n]");
+            throw new RuntimeException(String.format("Can't drop table '%s' ",tableName) + message[0]);
         }
     }
 
@@ -121,7 +131,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             e.printStackTrace();
         }
     }
-
+    //TODO delete method if not needed
     public int getColumnCount(String tableName) throws SQLException {
         try (Statement statement = connection.createStatement();
              ResultSet resultSetCount = statement.executeQuery(String.format("SELECT COUNT (*) FROM public.%s", tableName)))
@@ -155,6 +165,17 @@ public class JDBCDataBaseManager implements DataBaseManager {
     @Override
     public boolean isConnected() {
         return connection != null;
+    }
+
+    @Override
+    public void createTable(String tableName, String data) {
+        try  (Statement statement = connection.createStatement())
+        {
+            statement.executeUpdate(String.format("CREATE TABLE public.%s(%s);", tableName,data));
+        } catch (SQLException e) {
+            String [] message = e.getMessage().split("[\n]");
+            throw new RuntimeException(String.format("Can't create table '%s' ",tableName) + message[0]);
+        }
     }
 
 }

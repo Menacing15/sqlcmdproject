@@ -24,13 +24,13 @@ public class ConnectTest {
     }
 
     @Test
-    public void testProcessAbleConnectWithParametersString() {
+    public void testProcessAbleConnectWithParameters() {
         boolean processAble = command.processAble("connect:sqlcmd,postgres,1234");
         assertTrue(processAble);
     }
 
     @Test
-    public void testProcessAbleConnectWithoutParametersString() {
+    public void testProcessAbleConnectWithoutParameters() {
         boolean processAble = command.processAble("connect");
         assertFalse(processAble);
     }

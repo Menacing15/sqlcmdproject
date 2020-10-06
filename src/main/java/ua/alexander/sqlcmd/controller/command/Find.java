@@ -4,6 +4,7 @@ import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
+import java.util.List;
 import java.util.Set;
 
 public class Find implements Command {
@@ -24,10 +25,9 @@ public class Find implements Command {
     @Override
     public void execute(String command) {
             String[] data = command.split("[:]");
-
-            if (data.length != getParameterLength()) {
+            if (data.length != getParameterLength(COMMAND_SAMPLE)) {
                 throw new IllegalArgumentException("Something is missing... Quantity of parameters is " + data.length +
-                        " ,but you need " + getParameterLength());
+                        " ,but you need " + getParameterLength(COMMAND_SAMPLE));
             }
             String tableName = data[1];
 
@@ -35,17 +35,13 @@ public class Find implements Command {
 
             if (tableColumns.size() != 0) {
                 drawHeader(tableColumns);
-                java.util.List<Data> tableData = dbManager.getTableData(tableName);
+                List<Data> tableData = dbManager.getTableData(tableName);
                 drawTable(tableData);
             }
     }
 
-    private int getParameterLength() {
-        return COMMAND_SAMPLE.split("[:]").length;
-    }
 
-
-    private void drawTable(java.util.List<Data> tableData) {
+    private void drawTable(List<Data> tableData) {
         for (Data row : tableData) {
             printRow(row);
         }

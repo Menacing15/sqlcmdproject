@@ -3,7 +3,7 @@ package ua.alexander.sqlcmd.module;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -37,17 +37,17 @@ public abstract class DataBaseManagerTest {
     public void testGetTableData() {
         jdbcDBManager.clearTable("user");
 
-        Data input = new Data();
+        Data input = new DataImpl();
         input.put("id", 8);
         input.put("username", "Andreev");
         input.put("password", "qwerty");
         jdbcDBManager.insertData("user", input);
 
-        java.util.List<Data> users = jdbcDBManager.getTableData("user");
+        List<Data> users = jdbcDBManager.getTableData("user");
         Data user = users.get(0);
 
-        assertEquals("[id, username, password]", Arrays.toString(user.getNames()));
-        assertEquals("[8, Andreev, qwerty]", Arrays.toString(user.getValues()));
+        assertEquals("[id, username, password]", user.getNames().toString());
+        assertEquals("[8, Andreev, qwerty]", user.getValues().toString());
 
         System.out.println("#Table Data:#\n\n" + jdbcDBManager.getTableData("user"));
     }
@@ -63,21 +63,21 @@ public abstract class DataBaseManagerTest {
     public void testUpdateTableData() {
         jdbcDBManager.clearTable("user");
 
-        Data input = new Data();
+        Data input = new DataImpl();
         input.put("id", 8);
         input.put("username", "Andreev");
         input.put("password", "qwerty");
         jdbcDBManager.insertData("user",input);
 
-        Data update = new Data();
+        Data update = new DataImpl();
         update.put("password", "qwerty1234");
         jdbcDBManager.updateTableData("user", update ,8);
 
-        java.util.List<Data> users = jdbcDBManager.getTableData("user");
+        List<Data> users = jdbcDBManager.getTableData("user");
         Data user = users.get(0);
 
-        assertEquals("[id, username, password]", Arrays.toString(user.getNames()));
-        assertEquals("[8, Andreev, qwerty1234]", Arrays.toString(user.getValues()));
+        assertEquals("[id, username, password]", user.getNames().toString());
+        assertEquals("[8, Andreev, qwerty1234]",user.getValues().toString());
 
         System.out.println("#Updated table#\n\n" + jdbcDBManager.getTableData("user"));
     }

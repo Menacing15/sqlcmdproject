@@ -21,7 +21,7 @@ public class MainController {
                 new Help(view),
                 new IsConnected(view,dbManager),
                 new Insert(view, dbManager),
-                new List(view, dbManager),
+                new Tables(view, dbManager),
                 new Find(view, dbManager),
                 new Clear(view, dbManager),
                 new Unsupported(view)

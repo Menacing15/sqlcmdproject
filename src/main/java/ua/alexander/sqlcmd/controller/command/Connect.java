@@ -22,11 +22,10 @@ public class Connect implements Command {
 
     @Override
     public void execute(String command) {
-        String[] data = getCommandRefactored(command);
-
-        if (data.length != getParameterLength()) {
+        String[] data = refactorCommandWithMultipleParam(command);
+        if (data.length != getParameterLength(COMMAND_SAMPLE)) {
             throw new IllegalArgumentException("Something is missing... Quantity of parameters is " + data.length +
-                    " ,but you need " + getParameterLength());
+                    " ,but you need " + getParameterLength(COMMAND_SAMPLE));
         }
         String database = data[0];
         String username = data[1];
@@ -36,7 +35,8 @@ public class Connect implements Command {
         view.type("Please enter your command! Type 'help' to see available commands.");
     }
 
-    private int getParameterLength() {
+    @Override
+    public int getParameterLength(String command) {
         return COMMAND_SAMPLE.split("[,]").length;
     }
 }

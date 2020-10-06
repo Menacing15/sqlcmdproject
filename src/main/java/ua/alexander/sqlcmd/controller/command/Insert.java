@@ -2,6 +2,7 @@ package ua.alexander.sqlcmd.controller.command;
 
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
+import ua.alexander.sqlcmd.module.DataImpl;
 import ua.alexander.sqlcmd.view.View;
 
 public class Insert implements Command {
@@ -20,7 +21,7 @@ public class Insert implements Command {
 
     @Override
     public void execute(String command) {
-        String[] input = getCommandRefactored(command);
+        String[] input = refactorCommandWithMultipleParam(command);
         if (input.length % 2 != 1) {
             throw new IllegalArgumentException(String.format("Some parameters are missing. " +
                     "The command should look like that: \n" +
@@ -29,7 +30,7 @@ public class Insert implements Command {
         }
         String tableName = input[0];
 
-        Data data = new Data();
+        Data data = new DataImpl();
         for (int index = 1; index < input.length; index = index + 2) {
             String columnName = input[index];
             String value = input[index + 1];

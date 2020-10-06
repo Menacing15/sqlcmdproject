@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
+import ua.alexander.sqlcmd.module.DataImpl;
 import ua.alexander.sqlcmd.view.View;
 
 import static org.junit.Assert.assertTrue;
@@ -28,9 +29,9 @@ public class InsertTest {
         assertTrue(processAble);
     }
 
-    @Ignore
+    @Ignore                     //TODO разобраться почему не работает
     public void testInsert(){
-        Data data = new Data();
+        Data data = new DataImpl();
         data.put("id",1);
 
         command.execute("insert:user,id,1");
