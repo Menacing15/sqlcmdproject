@@ -4,7 +4,7 @@ import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
 public class Create implements Command{
-    private static final String COMMAND_SAMPLE = "create:test,";
+    private static final String COMMAND_SAMPLE = "create:test,id,numeric,name,text";
     private DataBaseManager dbManager;
     private View view;
 
@@ -35,6 +35,7 @@ public class Create implements Command{
             else
                 columnsNameAndType += data[i] + " ";
         }
+        columnsNameAndType = columnsNameAndType.substring(0,columnsNameAndType.length() - 2);
         dbManager.createTable(tableName,columnsNameAndType);
         view.type(String.format("Table '%s' was created successfully!", tableName));
     }

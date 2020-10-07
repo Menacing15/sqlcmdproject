@@ -178,5 +178,14 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
     }
 
+    @Override
+    public void updateTable(String tableName, String checkValue, String newValue) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE public.%s SET %sWHERE %s",
+                tableName, newValue, checkValue))){
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }
 

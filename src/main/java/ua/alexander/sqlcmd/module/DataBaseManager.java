@@ -23,4 +23,6 @@ public interface DataBaseManager {
     boolean isConnected();
 
     void createTable(String tableName, String data);
+
+    void updateTable(String tableName, String checkValue, String newValue);
 }

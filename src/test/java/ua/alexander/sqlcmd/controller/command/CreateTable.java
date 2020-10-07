@@ -35,7 +35,7 @@ public class CreateTable {
     @Test
     public void testCreate(){
         command.execute("create:test,id,numeric,name,text");
-        verify(dbManager).createTable("test","id numeric, name text, ");
+        verify(dbManager).createTable("test","id numeric, name text");
         verify(view).type("Table 'test' was created successfully!");
     }
 

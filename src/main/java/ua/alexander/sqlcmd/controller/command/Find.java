@@ -34,35 +34,9 @@ public class Find implements Command {
             Set<String> tableColumns = dbManager.getTableColumnNames(tableName);
 
             if (tableColumns.size() != 0) {
-                drawHeader(tableColumns);
+                view.drawHeader(tableColumns);
                 List<Data> tableData = dbManager.getTableData(tableName);
-                drawTable(tableData);
+                view.drawTable(tableData);
             }
-    }
-
-
-    private void drawTable(List<Data> tableData) {
-        for (Data row : tableData) {
-            printRow(row);
-        }
-        view.type("|-----------------------|");
-    }
-
-    private void printRow(Data row) {
-        String result = "|";
-        for (Object value : row.getValues()) {
-            result += value + "|";
-        }
-        view.type(result);
-    }
-
-    private void drawHeader(Set <String> tableColumns) {
-        String result = "|";
-        for (String name : tableColumns) {
-            result += name + "|";
-        }
-        view.type("|-----------------------|");
-        view.type(result);
-        view.type("|-----------------------|");
     }
 }

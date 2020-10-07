@@ -29,7 +29,7 @@ public abstract class DataBaseManagerTest {
     public void testGetTableNames() {
         Set<String> tableNames = jdbcDBManager.getTableNames();
         System.out.println(tableNames);
-        assertEquals("[user, test]", tableNames.toString());
+        assertEquals("[user]", tableNames.toString());
 
     }
 

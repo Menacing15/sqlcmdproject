@@ -1,6 +1,5 @@
 package ua.alexander.sqlcmd.controller;
 
-import ua.alexander.sqlcmd.controller.command.Create;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.module.JDBCDataBaseManager;
 import ua.alexander.sqlcmd.view.Console;
@@ -13,6 +12,7 @@ public class Main {
         DataBaseManager dbManager = new JDBCDataBaseManager();
         MainController mc = new MainController(view, dbManager);
         mc.run();
+
     }
 }
 

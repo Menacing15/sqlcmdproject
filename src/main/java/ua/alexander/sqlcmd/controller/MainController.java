@@ -10,20 +10,21 @@ import ua.alexander.sqlcmd.view.View;
 public class MainController {
     private View view;
     private Command[] commands;
-    private DataBaseManager dbManager;
 
     public MainController(View view, DataBaseManager dbManager) {
         this.view = new Console();
-        this.dbManager = new JDBCDataBaseManager();
         this.commands = new Command[]{
                 new Connect(view,dbManager),
-                new Exit(view),
+                new Exit(),
                 new Help(view),
                 new IsConnected(view,dbManager),
                 new Insert(view, dbManager),
+                new Update(view,dbManager),
                 new Tables(view, dbManager),
                 new Find(view, dbManager),
                 new Clear(view, dbManager),
+                new Create(view,dbManager),
+                new Drop(view,dbManager),
                 new Unsupported(view)
         };
     }
