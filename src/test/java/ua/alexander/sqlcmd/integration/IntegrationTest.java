@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import ua.alexander.sqlcmd.controller.Main;
+import ua.alexander.sqlcmd.controller.Runner.Main;
 
 import java.io.PrintStream;
 
@@ -106,10 +106,10 @@ public class IntegrationTest {
         assertEquals("Hi, friend! Please insert database name, username and password. " +
                 "Format: connect:database,username,password\r\n" +
                 //error 1
-                "[31mFailed, the reason is: Something is missing... Quantity of parameters is 1 ,but you need 3[0m\n" +
+                "[31mFailed, the reason is: Something is missing... Quantity of parameters is 2 ,but you need 4[0m\n" +
                 "Try again!\r\n" +
                 //error 2
-                "[31mFailed, the reason is: Something is missing... Quantity of parameters is 0 ,but you need 3[0m\n" +
+                "[31mFailed, the reason is: Something is missing... Quantity of parameters is 1 ,but you need 4[0m\n" +
                 "Try again!\r\n" +
                 //exit
                 "See ya!\r\n", out.getData());

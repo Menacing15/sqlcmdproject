@@ -1,8 +1,7 @@
-package ua.alexander.sqlcmd.controller;
+package ua.alexander.sqlcmd.controller.Runner;
 
 import ua.alexander.sqlcmd.controller.command.*;
 import ua.alexander.sqlcmd.module.DataBaseManager;
-import ua.alexander.sqlcmd.module.JDBCDataBaseManager;
 import ua.alexander.sqlcmd.view.Console;
 import ua.alexander.sqlcmd.view.View;
 
@@ -59,7 +58,7 @@ public class MainController {
 
     }
 
-    public void printError(Exception e) {
+    private void printError(Exception e) {
         String message = e.getMessage();
         if (e.getCause() != null) {
             message += " " + e.getCause().getMessage();

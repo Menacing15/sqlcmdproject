@@ -11,7 +11,7 @@ public class ExitTest {
     private View view = Mockito.mock(View.class);
     @Test
     public void testProcessAbleExit(){
-        Command command = new Exit(view);
+        Command command = new Exit();
         boolean processAble = command.processAble("exit");
         assertTrue(processAble);
     }
@@ -19,7 +19,7 @@ public class ExitTest {
 
     @Test
     public void testExecuteExitCommandThrowsExitException() {
-        Command command = new Exit(view);
+        Command command = new Exit();
         try {
             command.execute("exit");
             fail("Expected ExitException");

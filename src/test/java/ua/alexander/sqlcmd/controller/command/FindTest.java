@@ -2,16 +2,16 @@ package ua.alexander.sqlcmd.controller.command;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.ArgumentCaptor;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.module.DataImpl;
 import ua.alexander.sqlcmd.view.View;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -28,6 +28,14 @@ public class FindTest {
         command = new Find(view, dbManager);
     }
 
+    private final PrintStream standardOut = System.out;
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+
+    @BeforeEach
+    public void setUp() {
+        System.setOut(new PrintStream(outputStreamCaptor));
+    }
+
     @Test
     public void testProcessAbleFindWithParameters() {
         boolean processAble = command.processAble("find:user");
@@ -41,45 +49,55 @@ public class FindTest {
     }
 
     @Test
-    public void testPrintTable(){
-        setupTableColumns("user","id", "username", "password");
+    public void testPrintTable(){       //TODO как вывести таблицу????
+        when(dbManager.getTableColumnNames("user")).
+                thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
 
         Data data1 = new DataImpl();
         data1.put("id",8);
-        data1.put("username","Sasha");
-        data1.put("password","ilovedana");
+        data1.put("username","sasha");
+        data1.put("password","love");
 
         Data data2 = new DataImpl();
         data2.put("id",20);
-        data2.put("username","Dana");
-        data2.put("password","hopefully");
+        data2.put("username","dana");
+        data2.put("password","hope");
 
-        List<Data> data = new ArrayList<>(Arrays.asList(data1,data2));
+        List<Data> data = new LinkedList<>(Arrays.asList(data1,data2));
         when(dbManager.getTableData("user")).thenReturn(data);
 
         command.execute("find:user");
+        verify(view, atLeastOnce()).drawHeader(dbManager.getTableColumnNames("user"));
+        verify(view, atLeastOnce()).drawTable(dbManager.getTableData("user"));
 
-        // then
-        shouldPrint("[|-----------------------|, " +
-                "|id|username|password|, " +
-                "|-----------------------|, " +
-                "|8|Sasha|ilovedana|, " +
-                "|20|Dana|hopefully|, " +
-                "|-----------------------|]");
+        /*
+        |-----------------------|
+        |id|username|password|
+        |-----------------------|
+        |8|sasha|love|
+        |20|dana|hope|
+        |-----------------------|
+         */
     }
 
     @Test
     public void testPrintEmptyTableData() {
-        setupTableColumns("user","id", "username", "password");
+        when(dbManager.getTableColumnNames("user")).
+                thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
+        when(dbManager.getTableData("user")).
+                thenReturn(new ArrayList<>(0));
 
-        when(dbManager.getTableData("user")).thenReturn(new ArrayList<>(0));
         command.execute("find:user");
 
-        // then
-        shouldPrint("[|-----------------------|, " +
-                "|id|username|password|, " +
-                "|-----------------------|, " +
-                "|-----------------------|]");
+        verify(view, atLeastOnce()).drawHeader(dbManager.getTableColumnNames("user"));
+        verify(view, atLeastOnce()).drawTable(dbManager.getTableData("user"));
+
+        /*
+        |-----------------------|
+        |id|username|password|
+        |-----------------------|
+        |-----------------------|
+         */
     }
 
     @Test
@@ -95,16 +113,5 @@ public class FindTest {
             assertEquals("Something is missing... Quantity of parameters is 3 ,but you need 2", e.getMessage());
         }
 
-    }
-
-    private void shouldPrint(String expected) {
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        verify(view, atLeastOnce()).type(captor.capture());
-        assertEquals(expected, captor.getAllValues().toString());
-    }
-
-    private void setupTableColumns(String tableName, String... columns) {
-        when(dbManager.getTableColumnNames(tableName))
-                .thenReturn(new LinkedHashSet<>(Arrays.asList(columns)));
     }
 }

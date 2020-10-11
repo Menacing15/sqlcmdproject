@@ -131,7 +131,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             e.printStackTrace();
         }
     }
-    //TODO delete method if not needed
+
     public int getColumnCount(String tableName) throws SQLException {
         try (Statement statement = connection.createStatement();
              ResultSet resultSetCount = statement.executeQuery(String.format("SELECT COUNT (*) FROM public.%s", tableName)))

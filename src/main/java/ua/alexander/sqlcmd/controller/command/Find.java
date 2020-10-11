@@ -1,5 +1,6 @@
 package ua.alexander.sqlcmd.controller.command;
 
+import ua.alexander.sqlcmd.controller.tools.CommandTools;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
@@ -11,8 +12,10 @@ public class Find implements Command {
     private static final String COMMAND_SAMPLE = "find:user";
     private DataBaseManager dbManager;
     private View view;
+    private CommandTools tool;
 
     public Find(View view, DataBaseManager dbManager) {
+        tool = new CommandTools();
         this.view = view;
         this.dbManager = dbManager;
     }
@@ -24,19 +27,16 @@ public class Find implements Command {
 
     @Override
     public void execute(String command) {
-            String[] data = command.split("[:]");
-            if (data.length != getParameterLength(COMMAND_SAMPLE)) {
-                throw new IllegalArgumentException("Something is missing... Quantity of parameters is " + data.length +
-                        " ,but you need " + getParameterLength(COMMAND_SAMPLE));
-            }
-            String tableName = data[1];
+        String[] data = command.split("[:]");
+        tool.validateCommandWithFixedSize(data,COMMAND_SAMPLE);
+        String tableName = data[1];
 
-            Set<String> tableColumns = dbManager.getTableColumnNames(tableName);
+        Set<String> tableColumns = dbManager.getTableColumnNames(tableName);
 
-            if (tableColumns.size() != 0) {
-                view.drawHeader(tableColumns);
-                List<Data> tableData = dbManager.getTableData(tableName);
-                view.drawTable(tableData);
-            }
+        if (tableColumns.size() != 0) {
+            view.drawHeader(tableColumns);
+            List<Data> tableData = dbManager.getTableData(tableName);
+            view.drawTable(tableData);
+        }
     }
 }

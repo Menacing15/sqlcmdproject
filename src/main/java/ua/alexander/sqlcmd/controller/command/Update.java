@@ -1,5 +1,6 @@
 package ua.alexander.sqlcmd.controller.command;
 
+import ua.alexander.sqlcmd.controller.tools.CommandTools;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
@@ -10,8 +11,10 @@ import java.util.Set;
 public class Update implements Command {
     private DataBaseManager dbManager;
     private View view;
+    private CommandTools tool;
 
     public Update( View view, DataBaseManager dbManger){
+        tool = new CommandTools();
         this.dbManager = dbManger;
         this.view = view;
     }
@@ -23,13 +26,8 @@ public class Update implements Command {
 
     @Override
     public void execute(String command) {
-        String[] input = refactorCommandWithMultipleParam(command);
-        if (input.length % 2 != 1) {
-            throw new IllegalArgumentException(String.format("Some parameters are missing. " +
-                    "The command should look like that: \n" +
-                    "'update:tableName,column1,value1,column2,value2...columnN,valueN', " +
-                    "but your is: '%s'", command));
-        }
+        String[] input = tool.refactorCommandWithMultipleParam(command);
+        tool.validateCommandWithCustomSize(input,command);
         String tableName = input[0];
 
         String checkParam = input[1] + " = '" + input[2] + "'";

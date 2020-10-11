@@ -1,5 +1,6 @@
 package ua.alexander.sqlcmd.controller.command;
 
+import ua.alexander.sqlcmd.controller.tools.CommandTools;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
@@ -9,8 +10,10 @@ public class Connect implements Command {
 
     private View view;
     private DataBaseManager dbManager;
+    private CommandTools tool;
 
     public Connect(View view, DataBaseManager dbManager) {
+        tool = new CommandTools();
         this.dbManager = dbManager;
         this.view = view;
     }
@@ -22,21 +25,13 @@ public class Connect implements Command {
 
     @Override
     public void execute(String command) {
-        String[] data = refactorCommandWithMultipleParam(command);
-        if (data.length != getParameterLength(COMMAND_SAMPLE)) {
-            throw new IllegalArgumentException("Something is missing... Quantity of parameters is " + data.length +
-                    " ,but you need " + getParameterLength(COMMAND_SAMPLE));
-        }
-        String database = data[0];
-        String username = data[1];
-        String password = data[2];
+        String[] data = tool.refactorCommandWithMultipleParam(command);
+        tool.validateCommandWithFixedSize(data,COMMAND_SAMPLE);
+        String database = data[1];
+        String username = data[2];
+        String password = data[3];
         dbManager.connect(database, username, password);
         view.type("\u001B[34m" + "Success!" + "\u001B[0m");
         view.type("Please enter your command! Type 'help' to see available commands.");
-    }
-
-    @Override
-    public int getParameterLength(String command) {
-        return COMMAND_SAMPLE.split("[,]").length;
     }
 }

@@ -48,7 +48,7 @@ public class ConnectTest {
         try {
             command.execute("connect:sqlcmd");
         }catch(IllegalArgumentException e){
-            assertEquals("Something is missing... Quantity of parameters is 1 ,but you need 3", e.getMessage());
+            assertEquals("Something is missing... Quantity of parameters is 2 ,but you need 4", e.getMessage());
         }
     }
 

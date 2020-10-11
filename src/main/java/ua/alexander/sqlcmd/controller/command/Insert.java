@@ -1,5 +1,6 @@
 package ua.alexander.sqlcmd.controller.command;
 
+import ua.alexander.sqlcmd.controller.tools.CommandTools;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.module.DataImpl;
@@ -8,8 +9,10 @@ import ua.alexander.sqlcmd.view.View;
 public class Insert implements Command {
     private final DataBaseManager dbManager;
     private final View view;
+    private CommandTools tool;
 
     public Insert(View view, DataBaseManager dbManager) {
+        tool = new CommandTools();
         this.dbManager = dbManager;
         this.view = view;
     }
@@ -21,17 +24,12 @@ public class Insert implements Command {
 
     @Override
     public void execute(String command) {
-        String[] input = refactorCommandWithMultipleParam(command);
-        if (input.length % 2 != 1) {
-            throw new IllegalArgumentException(String.format("Some parameters are missing. " +
-                    "The command should look like that: \n" +
-                    "'insert:tableName,column1,value1,column2,value2...columnN,valueN', " +
-                    "but your is: '%s'", command));
-        }
-        String tableName = input[0];
+        String[] input = tool.refactorCommandWithMultipleParam(command);
+        tool.validateCommandWithCustomSize(input,command);
+        String tableName = input[1];
 
         Data data = new DataImpl();
-        for (int index = 1; index < input.length; index = index + 2) {
+        for (int index = 2; index < input.length; index = index + 2) {
             String columnName = input[index];
             String value = input[index + 1];
 
