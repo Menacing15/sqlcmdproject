@@ -411,7 +411,6 @@ public class IntegrationTest {
                 "See ya!\r\n", out.getData());
     }
 
-
     @Test
     public void testCreateAndDropTable() {
         in.add("connect:sqlcmd,postgres,1234");
@@ -431,5 +430,69 @@ public class IntegrationTest {
                 "See ya!\r\n", out.getData());
     }
 
+    @Test
+    public void testUpdate() {
+        in.add("connect:sqlcmd,postgres,1234");
+        in.add("insert:user,id,20,username,d,password,cola");
+        in.add("update:user,id,20,username,dana");
+        in.add("exit");
+
+        Main.main(new String[0]);
+
+        assertEquals("Hi, friend! Please insert database name, username and password. Format: connect:database,username,password\r\n" +
+                "[34mSuccess![0m\r\n" +
+                "Please enter your command! Type 'help' to see available commands.\r\n" +
+                "Record names:[id, username, password]\n" +
+                "values:[20, d, cola] was successfully added to the table 'user'.\r\n" +
+                "|-----------------------|\r\n" +
+                "|id|username|password|\r\n" +
+                "|-----------------------|\r\n" +
+                "|20|dana|cola|\r\n" +
+                "|-----------------------|\r\n"+
+                "See ya!\r\n", out.getData());
+    }
+
+    @Test
+    public void testUpdateWrongCheckValue() {
+        in.add("connect:sqlcmd,postgres,1234");
+        in.add("insert:user,id,20,username,dana,password,cola");
+        in.add("update:user,id,19,username,sasha");
+        in.add("exit");
+
+        Main.main(new String[0]);
+
+        assertEquals("Hi, friend! Please insert database name, username and password. Format: connect:database,username,password\r\n" +
+                "[34mSuccess![0m\r\n" +
+                "Please enter your command! Type 'help' to see available commands.\r\n" +
+                "Record names:[id, username, password]\n" +
+                "values:[20, dana, cola] was successfully added to the table 'user'.\r\n" +
+                "|-----------------------|\r\n" +
+                "|id|username|password|\r\n" +
+                "|-----------------------|\r\n" +
+                "|20|dana|cola|\r\n" +
+                "|-----------------------|\r\n"+
+                "See ya!\r\n", out.getData());
+    }
+
+
+    @Test
+    public void testUpdateWrongParameters() {
+        in.add("connect:sqlcmd,postgres,1234");
+        in.add("insert:user,id,20,username,dana,password,cola");
+        in.add("update:user,id,19,username");
+        in.add("exit");
+
+        Main.main(new String[0]);
+
+        assertEquals("Hi, friend! Please insert database name, username and password. Format: connect:database,username,password\r\n" +
+                "[34mSuccess![0m\r\n" +
+                "Please enter your command! Type 'help' to see available commands.\r\n" +
+                "Record names:[id, username, password]\n" +
+                "values:[20, dana, cola] was successfully added to the table 'user'.\r\n" +
+                "\u001B[31mFailed, the reason is: Some parameters are missing. The command should look like that: \n" +
+                "'update:tableName,column1,value1,column2,value2...columnN,valueN', but your is: 'update:user,id,19,username'\u001B[0m\n" +
+                "Try again!\r\n" +
+                "See ya!\r\n", out.getData());
+    }
 
 }

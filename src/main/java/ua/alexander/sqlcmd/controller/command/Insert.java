@@ -29,7 +29,7 @@ public class Insert implements Command {
         String tableName = input[1];
 
         Data data = new DataImpl();
-        for (int index = 2; index < input.length; index = index + 2) {
+        for (int index = 2; index < input.length - 1; index = index + 2) {
             String columnName = input[index];
             String value = input[index + 1];
 

@@ -28,12 +28,12 @@ public class Update implements Command {
     public void execute(String command) {
         String[] input = tool.refactorCommandWithMultipleParam(command);
         tool.validateCommandWithCustomSize(input,command);
-        String tableName = input[0];
+        String tableName = input[1];
 
-        String checkParam = input[1] + " = '" + input[2] + "'";
+        String checkParam = input[2] + " = '" + input[3] + "'";
         String newValue = getSqlSetFormat(input);
 
-        dbManager.updateTable(tableName, checkParam,newValue);
+        dbManager.updateTable(tableName, checkParam, newValue);
 
         Set<String> tableColumns = dbManager.getTableColumnNames(tableName);
         if (tableColumns.size() != 0) {
@@ -46,7 +46,7 @@ public class Update implements Command {
 
     private String getSqlSetFormat(String[] input) {
         String newValue = " ";
-        for(int i = 3;i < input.length; i+=2){
+        for(int i = 4;i < input.length - 1; i += 2){
             newValue += input[i] + " = '" + input[i+1] + "',";
         }
         newValue = newValue.substring(0,newValue.length()-1);
