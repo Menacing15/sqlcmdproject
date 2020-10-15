@@ -12,5 +12,5 @@ public class Exit implements Command {
         throw new ExitException();
     }
 
-
 }
+

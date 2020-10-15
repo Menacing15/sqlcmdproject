@@ -1,7 +1,5 @@
 package ua.alexander.sqlcmd.controller.Runner;
 
-import ua.alexander.sqlcmd.controller.command.Connect;
-import ua.alexander.sqlcmd.controller.command.Update;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.module.JDBCDataBaseManager;
 import ua.alexander.sqlcmd.view.Console;

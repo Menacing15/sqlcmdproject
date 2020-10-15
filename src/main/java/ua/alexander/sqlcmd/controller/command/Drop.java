@@ -30,7 +30,6 @@ public class Drop implements Command {
             view.type("Table wasn't deleted.");
     }
 
-
     public void executeDropping(String command) {
         String[] data = command.split("[:]");
         tool.validateCommandWithFixedSize(data,COMMAND_SAMPLE);

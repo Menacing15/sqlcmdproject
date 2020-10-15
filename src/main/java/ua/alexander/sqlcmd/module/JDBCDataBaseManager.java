@@ -57,7 +57,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
     }
 
-
     public List<Data> getTableData(String tableName) {
         List<Data> output = new ArrayList<>();
         try (Statement statement = connection.createStatement();
@@ -78,7 +77,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
             return output;
         }
     }
-
 
     public void clearTable(String tableName){
         try  (Statement statement = connection.createStatement())
@@ -129,18 +127,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    public int getColumnCount(String tableName) throws SQLException {
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSetCount = statement.executeQuery(String.format("SELECT COUNT (*) FROM public.%s", tableName)))
-        {
-            resultSetCount.next();
-            int size = resultSetCount.getInt(1);
-            resultSetCount.close();
-            statement.close();
-            return size;
         }
     }
 
