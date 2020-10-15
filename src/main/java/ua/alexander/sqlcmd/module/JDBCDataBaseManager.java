@@ -52,7 +52,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             return names;
         }
         catch (SQLException e) {
-            String [] message = e.getMessage().split("[\n]");
+            String[] message = e.getMessage().split("[\n]");
             throw new RuntimeException(message[0]);
         }
     }
@@ -83,7 +83,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
         {
             statement.executeUpdate(String.format("DELETE FROM public.%s", tableName));
         } catch (SQLException e) {
-            String [] message = e.getMessage().split("[\n]");
+            String[] message = e.getMessage().split("[\n]");
             throw new RuntimeException(String.format("Can't clear table '%s' ",tableName) + message[0]);
         }
     }
@@ -93,7 +93,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
         {
             statement.executeUpdate(String.format("DROP TABLE public.%s", tableName));
         } catch (SQLException e) {
-            String [] message = e.getMessage().split("[\n]");
+            String[] message = e.getMessage().split("[\n]");
             throw new RuntimeException(String.format("Can't drop table '%s' ",tableName) + message[0]);
         }
     }
@@ -107,7 +107,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             statement.executeUpdate(String.format("INSERT INTO public."+ tableName +"(%s)VALUES (%s)", tableNames, values));
         }
          catch (SQLException e) {
-             String [] message = e.getMessage().split("[\n]");
+             String[] message = e.getMessage().split("[\n]");
              throw new RuntimeException(String.format("Can't insert in table '%s'. " +
                      "Column names: '%s', values %s ",tableName,tableNames, values) + message[0]);
          }
@@ -159,7 +159,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
         {
             statement.executeUpdate(String.format("CREATE TABLE public.%s(%s);", tableName,data));
         } catch (SQLException e) {
-            String [] message = e.getMessage().split("[\n]");
+            String[] message = e.getMessage().split("[\n]");
             throw new RuntimeException(String.format("Can't create table '%s' ",tableName) + message[0]);
         }
     }

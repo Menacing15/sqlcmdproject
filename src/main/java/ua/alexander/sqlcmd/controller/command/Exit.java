@@ -1,6 +1,5 @@
 package ua.alexander.sqlcmd.controller.command;
 
-
 public class Exit implements Command {
     @Override
     public boolean processAble(String command) {
