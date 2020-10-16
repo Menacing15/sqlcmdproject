@@ -26,7 +26,7 @@ public class Connect implements Command {
     @Override
     public void execute(String command) {
         String[] data = tool.refactorCommandWithMultipleParam(command);
-        tool.validateCommandWithFixedSize(data,COMMAND_SAMPLE);
+        tool.validateCommandWithFixedSize(data, COMMAND_SAMPLE);
         String database = data[1];
         String username = data[2];
         String password = data[3];

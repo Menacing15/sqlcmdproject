@@ -8,12 +8,12 @@ import ua.alexander.sqlcmd.view.View;
 import java.util.List;
 import java.util.Set;
 
-public class Update implements Command {
+public class Delete implements Command {
     private DataBaseManager dbManager;
     private View view;
     private CommandTools tool;
 
-    public Update(View view, DataBaseManager dbManger) {
+    public Delete(View view, DataBaseManager dbManger) {
         tool = new CommandTools();
         this.dbManager = dbManger;
         this.view = view;
@@ -21,19 +21,19 @@ public class Update implements Command {
 
     @Override
     public boolean processAble(String command) {
-        return command.startsWith("update:");
+        return command.startsWith("delete:");
     }
 
     @Override
     public void execute(String command) {
-        String[] input = tool.refactorCommandWithMultipleParam(command);
-        tool.validateCommandWithCustomSize(input, command);
-        String tableName = input[1];
+        String[] data = tool.refactorCommandWithMultipleParam(command);
+        tool.validateCommandWithCustomSize(data, command);
+        String tableName = data[1];
 
-        String checkParam = input[2] + " = '" + input[3] + "'";
-        String newValue = getSqlSetFormat(input);
+        String columnName = data[2];
+        String value = data[3];
 
-        dbManager.updateTable(tableName, checkParam, newValue);
+        dbManager.deleteCell(tableName, columnName, value);
 
         Set<String> tableColumns = dbManager.getTableColumnNames(tableName);
         if (tableColumns.size() != 0) {
@@ -43,13 +43,5 @@ public class Update implements Command {
         }
 
     }
-
-    private String getSqlSetFormat(String[] input) {
-        String newValue = " ";
-        for (int i = 4; i < input.length - 1; i += 2) {
-            newValue += input[i] + " = '" + input[i + 1] + "',";
-        }
-        newValue = newValue.substring(0, newValue.length() - 1);
-        return newValue;
-    }
 }
+

@@ -24,7 +24,7 @@ public class Drop implements Command {
     @Override
     public void execute(String command) {
         view.type("Are you sure you want to delete the table? Type 'y' to confirm, 'n' to discard");
-        if(new CommandTools().verification())
+        if (new CommandTools().verification())
             executeDropping(command);
         else
             view.type("Table wasn't deleted.");
@@ -32,7 +32,7 @@ public class Drop implements Command {
 
     public void executeDropping(String command) {
         String[] data = command.split("[:]");
-        tool.validateCommandWithFixedSize(data,COMMAND_SAMPLE);
+        tool.validateCommandWithFixedSize(data, COMMAND_SAMPLE);
         String tableName = data[1];
         dbManager.dropTable(tableName);
         view.type(String.format("Table '%s' was deleted successfully!", tableName));

@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Console implements View{
+public class Console implements View {
     public void type(String message) {
         System.out.println(message);
     }
@@ -16,7 +16,7 @@ public class Console implements View{
         try {
             Scanner scanner = new Scanner(System.in);
             return scanner.nextLine();
-        }catch(NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return null;
         }
     }
@@ -25,7 +25,7 @@ public class Console implements View{
         for (Data row : tableData) {
             printRow(row);
         }
-         System.out.println("|-----------------------|");
+        System.out.println("|-----------------|");
     }
 
     public void printRow(Data row) {
@@ -41,8 +41,8 @@ public class Console implements View{
         for (String name : tableColumns) {
             result += name + "|";
         }
-        System.out.println("|-----------------------|");
+        System.out.println("|-----------------|");
         System.out.println(result);
-        System.out.println("|-----------------------|");
+        System.out.println("|-----------------|");
     }
 }

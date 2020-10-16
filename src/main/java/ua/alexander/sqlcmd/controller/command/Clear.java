@@ -24,16 +24,16 @@ public class Clear implements Command {
     @Override
     public void execute(String command) {
         view.type("Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard");
-        if(new CommandTools().verification())
+        if (new CommandTools().verification())
             executeClearing(command);
         else
             view.type("Table wasn't cleared.");
     }
 
 
-    public void executeClearing(String command){
+    public void executeClearing(String command) {
         String[] data = command.split("[:]");
-        tool.validateCommandWithFixedSize(data,COMMAND_SAMPLE);
+        tool.validateCommandWithFixedSize(data, COMMAND_SAMPLE);
         String tableName = data[1];
         dbManager.clearTable(tableName);
         view.type(String.format("Table '%s' was cleared successfully!", tableName));

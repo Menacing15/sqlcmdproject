@@ -28,7 +28,7 @@ public class Find implements Command {
     @Override
     public void execute(String command) {
         String[] data = command.split("[:]");
-        tool.validateCommandWithFixedSize(data,COMMAND_SAMPLE);
+        tool.validateCommandWithFixedSize(data, COMMAND_SAMPLE);
         String tableName = data[1];
 
         Set<String> tableColumns = dbManager.getTableColumnNames(tableName);

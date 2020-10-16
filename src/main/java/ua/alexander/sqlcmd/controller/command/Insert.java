@@ -25,7 +25,7 @@ public class Insert implements Command {
     @Override
     public void execute(String command) {
         String[] input = tool.refactorCommandWithMultipleParam(command);
-        tool.validateCommandWithCustomSize(input,command);
+        tool.validateCommandWithCustomSize(input, command);
         String tableName = input[1];
 
         Data data = new DataImpl();

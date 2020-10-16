@@ -9,10 +9,11 @@ public class Tables implements Command {
     private DataBaseManager dbManager;
     private View view;
 
-    public Tables(View view, DataBaseManager dbManager){
+    public Tables(View view, DataBaseManager dbManager) {
         this.view = view;
         this.dbManager = dbManager;
     }
+
     @Override
     public boolean processAble(String command) {
         return command.equals("tables");
