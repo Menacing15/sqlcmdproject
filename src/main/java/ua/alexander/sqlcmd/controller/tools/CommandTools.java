@@ -25,15 +25,15 @@ public class CommandTools {
     }
 
     public String[] refactorCommandWithMultipleParam(String command) {
-        String[] comma = command.split("[,]");
-        if (comma.length != 1) {
-            String[] colon = comma[0].split("[:]");
-            List<String> list = new ArrayList<>(Arrays.asList(comma));
-            list.set(0, colon[0]);
-            list.add(1, colon[1]);
+        String[] splitByComma = command.split("[,]");
+        if (splitByComma.length != 1) {
+            String[] splitByColon = splitByComma[0].split("[:]");
+            List<String> list = new ArrayList<>(Arrays.asList(splitByComma));
+            list.set(0, splitByColon[0]);
+            list.add(1, splitByColon[1]);
             return list.toArray(new String[0]);
         } else {
-            return comma[0].split("[:]");
+            return splitByComma[0].split("[:]");
         }
     }
 

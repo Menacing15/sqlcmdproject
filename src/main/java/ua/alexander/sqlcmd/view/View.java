@@ -8,7 +8,5 @@ import java.util.Set;
 public interface View {
      String read();
      void type(String message);
-     void drawTable(List<Data> tableData);
-     void printRow(Data row);
-     void drawHeader(Set<String> tableColumns);
+     void drawTable(Set<String> tableColumns, List<Data> tableData);
 }

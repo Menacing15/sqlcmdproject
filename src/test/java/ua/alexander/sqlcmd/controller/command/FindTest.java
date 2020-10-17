@@ -3,7 +3,6 @@ package ua.alexander.sqlcmd.controller.command;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.ArgumentCaptor;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.module.DataImpl;
@@ -67,8 +66,8 @@ public class FindTest {
         when(dbManager.getTableData("user")).thenReturn(data);
 
         command.execute("find:user");
-        verify(view, atLeastOnce()).drawHeader(dbManager.getTableColumnNames("user"));
-        verify(view, atLeastOnce()).drawTable(dbManager.getTableData("user"));
+        verify(view, atLeastOnce()).
+                drawTable(dbManager.getTableColumnNames("user"),dbManager.getTableData("user"));
 
         /*
         |-----------------------|
@@ -89,8 +88,8 @@ public class FindTest {
 
         command.execute("find:user");
 
-        verify(view, atLeastOnce()).drawHeader(dbManager.getTableColumnNames("user"));
-        verify(view, atLeastOnce()).drawTable(dbManager.getTableData("user"));
+        verify(view, atLeastOnce()).
+                drawTable(dbManager.getTableColumnNames("user"),dbManager.getTableData("user"));
 
         /*
         |-----------------------|

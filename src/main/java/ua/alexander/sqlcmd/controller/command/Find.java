@@ -31,12 +31,6 @@ public class Find implements Command {
         tool.validateCommandWithFixedSize(data, COMMAND_SAMPLE);
         String tableName = data[1];
 
-        Set<String> tableColumns = dbManager.getTableColumnNames(tableName);
-
-        if (tableColumns.size() != 0) {
-            view.drawHeader(tableColumns);
-            List<Data> tableData = dbManager.getTableData(tableName);
-            view.drawTable(tableData);
-        }
+        view.drawTable(dbManager.getTableColumnNames(tableName),dbManager.getTableData(tableName));
     }
 }

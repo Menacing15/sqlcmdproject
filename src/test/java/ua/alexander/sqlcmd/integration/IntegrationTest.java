@@ -61,9 +61,15 @@ public class IntegrationTest {
                 "\thelp - to see all commands available.\r\n" +
                 "\tconnect:database,username,password  - to connect to a certain database\r\n" +
                 "\ttables -  to get all table names of the database you are connected to.\r\n" +
-                "\tinsert:tableName,column1,value1,column2,value2,...,columnN,valueN - to make a new record in the table\r\n" +
+                "\tcreate:tableName,column1,column2,...,columnN -  to create a table with a given name and columns\r\n" +
+                "\tinsert:tableName,column1,value1,column2,value2,...,columnN,valueN - \n" +
+                "\t\tto make a new record in the table\r\n" +
+                "\tupdate:tableName,column1,value1,column2,value2,...,columnN,valueN - \n" +
+                "\t\tto update a record in a table , where there is a record column1 = value1\r\n" +
                 "\tfind:tableName - to draw the table\r\n" +
+                "\tdrop:tableName - to drop the table\r\n" +
                 "\tclear:tableName - to clear table's content\r\n" +
+                "\tdelete:tableName,column,value - to delete a record in a table\r\n" +
                 "\texit - to shut down the program.\r\n" +
                 //exit
                 "See ya!\r\n", out.getData());

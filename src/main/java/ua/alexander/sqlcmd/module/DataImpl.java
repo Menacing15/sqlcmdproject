@@ -34,4 +34,24 @@ public class DataImpl implements Data {
                 "values:" + getValues().toString();
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof DataImpl)) {
+            return false;
+        }
+
+        DataImpl c = (DataImpl) o;
+
+        return this.data.equals(c.data);
+    }
+
+    @Override
+    public int hashCode(){
+        return data.keySet().hashCode();
+    }
 }

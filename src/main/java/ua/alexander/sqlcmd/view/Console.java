@@ -12,6 +12,12 @@ public class Console implements View {
         System.out.println(message);
     }
 
+    @Override
+    public void drawTable(Set<String> tableColumns, List<Data> tableData) {
+        drawHeader(tableColumns);
+        drawInnerData(tableData);
+    }
+
     public String read() {
         try {
             Scanner scanner = new Scanner(System.in);
@@ -21,14 +27,14 @@ public class Console implements View {
         }
     }
 
-    public void drawTable(List<Data> tableData) {
+     void drawInnerData(List<Data> tableData) {
         for (Data row : tableData) {
             printRow(row);
         }
-        System.out.println("|-----------------|");
+        System.out.println("|-----------------------|");
     }
 
-    public void printRow(Data row) {
+    void printRow(Data row) {
         String result = "|";
         for (Object value : row.getValues()) {
             result += value + "|";
@@ -36,13 +42,13 @@ public class Console implements View {
         System.out.println(result);
     }
 
-    public void drawHeader(Set<String> tableColumns) {
+    void drawHeader(Set<String> tableColumns) {
         String result = "|";
         for (String name : tableColumns) {
             result += name + "|";
         }
-        System.out.println("|-----------------|");
+        System.out.println("|-----------------------|");
         System.out.println(result);
-        System.out.println("|-----------------|");
+        System.out.println("|-----------------------|");
     }
 }

@@ -29,10 +29,10 @@ public class InsertTest {
         assertTrue(processAble);
     }
 
-    @Ignore                     //TODO разобраться почему не работает
+    @Test
     public void testInsert(){
         Data data = new DataImpl();
-        data.put("id",1);
+        data.put("id","1");
 
         command.execute("insert:user,id,1");
         verify(dbManager).insertData("user", data);

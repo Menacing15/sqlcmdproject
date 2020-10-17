@@ -14,7 +14,7 @@ public class CreateTable {
     View view;
     Command command;
 
-    public CreateTable(){
+    public CreateTable() {
         dbManager = mock(DataBaseManager.class);
         view = mock(View.class);
         command = new Create(view, dbManager);
@@ -33,9 +33,9 @@ public class CreateTable {
     }
 
     @Test
-    public void testCreate(){
+    public void testCreate() {
         command.execute("create:test,id,numeric,name,text");
-        verify(dbManager).createTable("test","id numeric, name text");
+        verify(dbManager).createTable("test", "id numeric, name text");
         verify(view).type("Table 'test' was created successfully!");
     }
 

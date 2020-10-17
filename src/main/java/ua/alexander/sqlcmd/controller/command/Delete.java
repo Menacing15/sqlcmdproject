@@ -35,13 +35,7 @@ public class Delete implements Command {
 
         dbManager.deleteCell(tableName, columnName, value);
 
-        Set<String> tableColumns = dbManager.getTableColumnNames(tableName);
-        if (tableColumns.size() != 0) {
-            view.drawHeader(tableColumns);
-            List<Data> tableData = dbManager.getTableData(tableName);
-            view.drawTable(tableData);
-        }
-
+        view.drawTable(dbManager.getTableColumnNames(tableName),dbManager.getTableData(tableName));
     }
 }
 
