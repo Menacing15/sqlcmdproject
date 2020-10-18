@@ -1,21 +1,17 @@
 package ua.alexander.sqlcmd.controller.command;
 
-import ua.alexander.sqlcmd.controller.tools.CommandTools;
-import ua.alexander.sqlcmd.module.Data;
+import ua.alexander.sqlcmd.controller.tools.CommandTool;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
-
-import java.util.List;
-import java.util.Set;
 
 public class Find implements Command {
     private static final String COMMAND_SAMPLE = "find:user";
     private DataBaseManager dbManager;
     private View view;
-    private CommandTools tool;
+    private CommandTool tool;
 
     public Find(View view, DataBaseManager dbManager) {
-        tool = new CommandTools();
+        tool = CommandTool.getCommandTool();
         this.view = view;
         this.dbManager = dbManager;
     }

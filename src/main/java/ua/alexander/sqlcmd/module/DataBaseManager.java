@@ -26,5 +26,5 @@ public interface DataBaseManager {
 
     void updateTable(String tableName, String checkValue, String newValue);
 
-    void deleteCell(String tableName, String column, String value);
+    void deleteRecord(String tableName, String column, String value);
 }

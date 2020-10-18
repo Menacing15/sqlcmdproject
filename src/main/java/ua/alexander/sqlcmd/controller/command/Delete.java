@@ -1,20 +1,17 @@
 package ua.alexander.sqlcmd.controller.command;
 
-import ua.alexander.sqlcmd.controller.tools.CommandTools;
-import ua.alexander.sqlcmd.module.Data;
+import ua.alexander.sqlcmd.controller.tools.CommandTool;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
-import java.util.List;
-import java.util.Set;
-
 public class Delete implements Command {
+    private static final String COMMAND_SAMPLE = "delete:user,id,4";
     private DataBaseManager dbManager;
     private View view;
-    private CommandTools tool;
+    private CommandTool tool;
 
     public Delete(View view, DataBaseManager dbManger) {
-        tool = new CommandTools();
+        tool = CommandTool.getCommandTool();
         this.dbManager = dbManger;
         this.view = view;
     }
@@ -26,16 +23,19 @@ public class Delete implements Command {
 
     @Override
     public void execute(String command) {
-        String[] data = tool.refactorCommandWithMultipleParam(command);
-        tool.validateCommandWithCustomSize(data, command);
-        String tableName = data[1];
+        String[] data = tool.refactorCommand(command);
+        tool.validateCommandWithFixedSize(data, COMMAND_SAMPLE);
+        if (CommandTool.getCommandTool().verification()) {
+            String tableName = data[1];
+            String columnName = data[2];
+            String value = data[3];
 
-        String columnName = data[2];
-        String value = data[3];
+            dbManager.deleteRecord(tableName, columnName, value);
 
-        dbManager.deleteCell(tableName, columnName, value);
-
-        view.drawTable(dbManager.getTableColumnNames(tableName),dbManager.getTableData(tableName));
+            view.drawTable(dbManager.getTableColumnNames(tableName),dbManager.getTableData(tableName));
+        }
+        else
+            view.type("Record wasn't deleted.");
     }
 }
 

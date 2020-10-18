@@ -1,6 +1,6 @@
 package ua.alexander.sqlcmd.controller.command;
 
-import ua.alexander.sqlcmd.controller.tools.CommandTools;
+import ua.alexander.sqlcmd.controller.tools.CommandTool;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.module.DataImpl;
@@ -9,10 +9,10 @@ import ua.alexander.sqlcmd.view.View;
 public class Insert implements Command {
     private final DataBaseManager dbManager;
     private final View view;
-    private CommandTools tool;
+    private CommandTool tool;
 
     public Insert(View view, DataBaseManager dbManager) {
-        tool = new CommandTools();
+        tool = CommandTool.getCommandTool();
         this.dbManager = dbManager;
         this.view = view;
     }
@@ -24,7 +24,7 @@ public class Insert implements Command {
 
     @Override
     public void execute(String command) {
-        String[] input = tool.refactorCommandWithMultipleParam(command);
+        String[] input = tool.refactorCommand(command);
         tool.validateCommandWithCustomSize(input, command);
         String tableName = input[1];
 

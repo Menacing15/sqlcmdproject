@@ -1,6 +1,6 @@
 package ua.alexander.sqlcmd.controller.command;
 
-import ua.alexander.sqlcmd.controller.tools.CommandTools;
+import ua.alexander.sqlcmd.controller.tools.CommandTool;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
@@ -10,10 +10,10 @@ public class Connect implements Command {
 
     private View view;
     private DataBaseManager dbManager;
-    private CommandTools tool;
+    private CommandTool tool;
 
     public Connect(View view, DataBaseManager dbManager) {
-        tool = new CommandTools();
+        tool = CommandTool.getCommandTool();
         this.dbManager = dbManager;
         this.view = view;
     }
@@ -25,7 +25,7 @@ public class Connect implements Command {
 
     @Override
     public void execute(String command) {
-        String[] data = tool.refactorCommandWithMultipleParam(command);
+        String[] data = tool.refactorCommand(command);
         tool.validateCommandWithFixedSize(data, COMMAND_SAMPLE);
         String database = data[1];
         String username = data[2];

@@ -165,7 +165,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void deleteCell(String tableName, String columnName, String value) {
+    public void deleteRecord(String tableName, String columnName, String value) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE public.%s SET %s = '' WHERE %s = '%s'",
                 tableName, columnName, columnName, value))) {
             preparedStatement.executeUpdate();

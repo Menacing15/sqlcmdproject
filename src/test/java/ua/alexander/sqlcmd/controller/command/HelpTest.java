@@ -1,20 +1,17 @@
 package ua.alexander.sqlcmd.controller.command;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 public class HelpTest {
     private View view;
     private Command command;
-    @Before
-    public void setup() {
+
+    public HelpTest(){
         view = mock(View.class);
         command = new Help(view);
     }

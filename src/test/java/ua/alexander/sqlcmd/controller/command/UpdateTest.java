@@ -56,7 +56,6 @@ public class UpdateTest {
         data2.put("password","hope");
 
         List<Data> data = new LinkedList<>(Arrays.asList(data1,data2));
-
         when(dbManager.getTableData("user")).thenReturn(data);
 
         command.execute("update:user,id,1,username,sasha");

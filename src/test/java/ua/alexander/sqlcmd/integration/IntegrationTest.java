@@ -289,7 +289,6 @@ public class IntegrationTest {
     public void testClearError() {
         in.add("connect:sqlcmd,postgres,1234");
         in.add("clear:");
-        in.add("y");
         in.add("clear:gf");
         in.add("y");
         in.add("exit");
@@ -300,8 +299,6 @@ public class IntegrationTest {
                 "Format: connect:database,username,password\r\n" +
                 "\u001B[34mSuccess!\u001B[0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
-                //verification
-                "Are you sure you want to delete all information from the table? Type 'y' to confirm, 'n' to discard\r\n" +
                 //error 1
                 "[31mFailed, the reason is: Something is missing... Quantity of parameters is 1 ,but you need 2[0m\n" +
                 "Try again!\r\n" +

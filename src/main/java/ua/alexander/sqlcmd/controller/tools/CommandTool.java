@@ -7,7 +7,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class CommandTools {
+public class CommandTool {
+    private static CommandTool commandTool;
+
+    public static synchronized CommandTool getCommandTool() {
+        if (commandTool == null) {
+            commandTool = new CommandTool();
+        }
+        return commandTool;
+    }
 
     public boolean verification() {
         Scanner scanner = new Scanner(System.in);
@@ -24,7 +32,7 @@ public class CommandTools {
         }
     }
 
-    public String[] refactorCommandWithMultipleParam(String command) {
+    public String[] refactorCommand(String command) {
         String[] splitByComma = command.split("[,]");
         if (splitByComma.length != 1) {
             String[] splitByColon = splitByComma[0].split("[:]");

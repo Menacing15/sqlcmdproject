@@ -1,20 +1,16 @@
 package ua.alexander.sqlcmd.controller.command;
 
-import ua.alexander.sqlcmd.controller.tools.CommandTools;
-import ua.alexander.sqlcmd.module.Data;
+import ua.alexander.sqlcmd.controller.tools.CommandTool;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
-
-import java.util.List;
-import java.util.Set;
 
 public class Update implements Command {
     private DataBaseManager dbManager;
     private View view;
-    private CommandTools tool;
+    private CommandTool tool;
 
     public Update(View view, DataBaseManager dbManger) {
-        tool = new CommandTools();
+        tool = CommandTool.getCommandTool();
         this.dbManager = dbManger;
         this.view = view;
     }
@@ -26,7 +22,7 @@ public class Update implements Command {
 
     @Override
     public void execute(String command) {
-        String[] input = tool.refactorCommandWithMultipleParam(command);
+        String[] input = tool.refactorCommand(command);
         tool.validateCommandWithCustomSize(input, command);
         String tableName = input[1];
 

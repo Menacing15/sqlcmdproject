@@ -1,16 +1,16 @@
 package ua.alexander.sqlcmd.controller.command;
 
-import ua.alexander.sqlcmd.controller.tools.CommandTools;
+import ua.alexander.sqlcmd.controller.tools.CommandTool;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
 public class Create implements Command {
     private DataBaseManager dbManager;
     private View view;
-    private CommandTools tool;
+    private CommandTool tool;
 
     public Create(View view, DataBaseManager dbManager) {
-        tool = new CommandTools();
+        tool = CommandTool.getCommandTool();
         this.view = view;
         this.dbManager = dbManager;
     }
@@ -22,7 +22,7 @@ public class Create implements Command {
 
     @Override
     public void execute(String command) {
-        String[] data = tool.refactorCommandWithMultipleParam(command);
+        String[] data = tool.refactorCommand(command);
         tool.validateCommandWithCustomSize(data, command);
         String columnsNameAndType = "";
         String tableName = data[1];
