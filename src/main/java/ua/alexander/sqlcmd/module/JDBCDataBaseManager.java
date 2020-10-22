@@ -92,6 +92,15 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
     }
 
+    @Override
+    public void createTable(String tableName, String data) {
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(String.format("CREATE TABLE public.%s(%s);", tableName, data));
+        } catch (SQLException e) {
+            String[] message = e.getMessage().split("[\n]");
+            throw new RuntimeException(String.format("Can't create table '%s' ", tableName) + message[0]);
+        }
+    }
 
     public void insertData(String tableName, Data input) {
         String tableNames = formatNames(input, "%s,");
@@ -105,52 +114,13 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
     }
 
-    public void updateTableData(String tableName, Data updatedValue, int id) {
-        String updatedNames = formatNames(updatedValue, "%s = ?,");
-        try (PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE public.%s " +
-                "SET %s WHERE id = ?", tableName, updatedNames))) {
-            int index = 1;
-            for (Object value : updatedValue.getValues()) {
-                preparedStatement.setString(index, value.toString());
-                index++;
-            }
-            preparedStatement.setInt(index, id);
+    @Override
+    public void deleteRecord(String tableName, String columnName, String value) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE public.%s SET %s = '' WHERE %s = '%s'",
+                tableName, columnName, columnName, value))) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String formatNames(Data input, String format) {
-        String names = "";
-        for (String name : input.getNames()) {
-            names += String.format(format, name);
-        }
-        names = names.substring(0, names.length() - 1);
-        return names;
-    }
-
-    public String formatValues(Data input, String format) {
-        String values = "";
-        for (Object value : input.getValues()) {
-            values += String.format(format, value);
-        }
-        values = values.substring(0, values.length() - 1);
-        return values;
-    }
-
-    @Override
-    public boolean isConnected() {
-        return connection != null;
-    }
-
-    @Override
-    public void createTable(String tableName, String data) {
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(String.format("CREATE TABLE public.%s(%s);", tableName, data));
-        } catch (SQLException e) {
-            String[] message = e.getMessage().split("[\n]");
-            throw new RuntimeException(String.format("Can't create table '%s' ", tableName) + message[0]);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -164,14 +134,28 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
     }
 
-    @Override
-    public void deleteRecord(String tableName, String columnName, String value) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE public.%s SET %s = '' WHERE %s = '%s'",
-                tableName, columnName, columnName, value))) {
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
+    private String formatNames(Data input, String format) {
+        String names = "";
+        for (String name : input.getNames()) {
+            names += String.format(format, name);
         }
+        names = names.substring(0, names.length() - 1);
+        return names;
+    }
+
+    private String formatValues(Data input, String format) {
+        String values = "";
+        for (Object value : input.getValues()) {
+            values += String.format(format, value);
+        }
+        values = values.substring(0, values.length() - 1);
+        return values;
+    }
+
+
+    @Override
+    public boolean isConnected() {
+        return connection != null;
     }
 
 }

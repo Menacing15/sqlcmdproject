@@ -28,8 +28,7 @@ public class Drop implements Command {
             String tableName = data[1];
             dbManager.dropTable(tableName);
             view.type(String.format("Table '%s' was deleted successfully!", tableName));
-        }
-        else
+        } else
             view.type("Table wasn't deleted.");
     }
 }

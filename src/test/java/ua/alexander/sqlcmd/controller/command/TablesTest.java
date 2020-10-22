@@ -33,8 +33,7 @@ public class TablesTest {
 
     @Test
     public void testTables(){
-        Mockito.when(dbManger.getTableNames()).
-                thenReturn(new LinkedHashSet<>(Collections.singletonList("user")));
+        Mockito.when(dbManger.getTableNames()).thenReturn(new LinkedHashSet<>(Collections.singletonList("user")));
         command.execute("tables");
         Mockito.verify(dbManger).getTableNames();
         Mockito.verify(view).type("[user]");

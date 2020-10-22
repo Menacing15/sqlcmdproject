@@ -23,10 +23,10 @@ public class ClearTest {
     private Command command;
     private CommandTool tool;
 
-    public ClearTest(){
+    public ClearTest() {
         dbManager = mock(DataBaseManager.class);
         view = mock(View.class);
-        command = new Clear(view,dbManager);
+        command = new Clear(view, dbManager);
     }
 
     @Before
@@ -66,7 +66,7 @@ public class ClearTest {
             assertEquals("Something is missing... Quantity of parameters is 3 ,but you need 2", e.getMessage());
         }
 
-        //when
+       ///when
         Mockito.doThrow(new IllegalArgumentException("Something is missing... Quantity of parameters is 3 ,but you need 2")).
                 when(tool).validateCommandWithFixedSize(commandExample3, "clear:user");
 

@@ -16,8 +16,6 @@ public interface DataBaseManager {
 
     void insertData(String tableName,Data input);
 
-    void updateTableData(String tableName, Data updatedValue, int id);
-
     void dropTable(String tableName);
 
     boolean isConnected();

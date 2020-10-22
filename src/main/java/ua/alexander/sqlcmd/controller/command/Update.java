@@ -31,7 +31,7 @@ public class Update implements Command {
 
         dbManager.updateTable(tableName, checkParam, newValue);
 
-        view.drawTable(dbManager.getTableColumnNames(tableName),dbManager.getTableData(tableName));
+        view.drawTable(dbManager.getTableColumnNames(tableName), dbManager.getTableData(tableName));
 
     }
 

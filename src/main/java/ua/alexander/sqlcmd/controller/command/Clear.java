@@ -28,8 +28,7 @@ public class Clear implements Command {
             String tableName = data[1];
             dbManager.clearTable(tableName);
             view.type(String.format("Table '%s' was cleared successfully!", tableName));
-        }
-        else
+        } else
             view.type("Table wasn't cleared.");
     }
 }

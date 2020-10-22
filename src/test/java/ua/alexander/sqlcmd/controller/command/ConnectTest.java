@@ -36,9 +36,9 @@ public class ConnectTest {
     }
 
     @Test
-    public void testConnect(){
+    public void testConnect() {
         command.execute("connect:sqlcmd,postgres,1234");
-        verify(dbManager).connect("sqlcmd","postgres","1234");
+        verify(dbManager).connect("sqlcmd", "postgres", "1234");
         verify(view).type("\u001B[34m" + "Success!" + "\u001B[0m");
         verify(view).type("Please enter your command! Type 'help' to see available commands.");
     }
@@ -47,16 +47,16 @@ public class ConnectTest {
     public void testConnectWrongParameters() {
         try {
             command.execute("connect:sqlcmd");
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             assertEquals("Something is missing... Quantity of parameters is 2 ,but you need 4", e.getMessage());
         }
     }
 
-    @Test(expected=RuntimeException.class)
+    @Test(expected = RuntimeException.class)
     public void testConnectWrongPassword() {
         doThrow(RuntimeException.class).
-                when(dbManager).connect("sqlcmd","postgres","wrongPassword");
-        dbManager.connect("sqlcmd","postgres","wrongPassword");
+                when(dbManager).connect("sqlcmd", "postgres", "wrongPassword");
+        dbManager.connect("sqlcmd", "postgres", "wrongPassword");
 
     }
 }
