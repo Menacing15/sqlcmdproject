@@ -395,9 +395,9 @@ public class IntegrationTest {
     @Test
     public void testCreateAfterCreate() {
         in.add("connect:sqlcmd,postgres,1234");
-        in.add("create:test,id,numeric,name,text");
-        in.add("create:test,id,numeric,name,text");
-        in.add("drop:test");
+        in.add("create:supertest,id,numeric,name,text");
+        in.add("create:supertest,id,numeric,name,text");
+        in.add("drop:supertest");
         in.add("y");
         in.add("exit");
 
@@ -406,11 +406,11 @@ public class IntegrationTest {
         assertEquals("Hi, friend! Please insert database name, username and password. Format: connect:database,username,password\r\n" +
                 "[34mSuccess![0m\r\n" +
                 "Please enter your command! Type 'help' to see available commands.\r\n" +
-                "Table 'test' was created successfully!\r\n" +
-                "\u001B[31mFailed, the reason is: Can't create table 'test' ERROR: relation \"test\" already exists\u001B[0m\n" +
+                "Table 'supertest' was created successfully!\r\n" +
+                "\u001B[31mFailed, the reason is: Can't create table 'supertest' ERROR: relation \"supertest\" already exists\u001B[0m\n" +
                 "Try again!\r\n"+
                 "Are you sure you want to delete the table? Type 'y' to confirm, 'n' to discard\r\n" +
-                "Table 'test' was deleted successfully!\r\n"+
+                "Table 'supertest' was deleted successfully!\r\n"+
                 "See ya!\r\n", out.getData());
     }
 

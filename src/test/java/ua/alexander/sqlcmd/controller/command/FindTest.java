@@ -2,14 +2,11 @@ package ua.alexander.sqlcmd.controller.command;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.module.DataImpl;
 import ua.alexander.sqlcmd.view.View;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -27,13 +24,6 @@ public class FindTest {
         command = new Find(view, dbManager);
     }
 
-    private final PrintStream standardOut = System.out;
-    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-
-    @BeforeEach
-    public void setUp() {
-        System.setOut(new PrintStream(outputStreamCaptor));
-    }
 
     @Test
     public void testProcessAbleFindWithParameters() {
@@ -48,35 +38,26 @@ public class FindTest {
     }
 
     @Test
-    public void testPrintTable(){       //TODO как вывести таблицу????
+    public void testPrintTable() {       //TODO как вывести таблицу????
         when(dbManager.getTableColumnNames("user")).
                 thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
 
         Data data1 = new DataImpl();
-        data1.put("id",8);
-        data1.put("username","sasha");
-        data1.put("password","love");
+        data1.put("id", 8);
+        data1.put("username", "sasha");
+        data1.put("password", "love");
 
         Data data2 = new DataImpl();
-        data2.put("id",20);
-        data2.put("username","dana");
-        data2.put("password","hope");
+        data2.put("id", 20);
+        data2.put("username", "dana");
+        data2.put("password", "hope");
 
-        List<Data> data = new LinkedList<>(Arrays.asList(data1,data2));
+        List<Data> data = new LinkedList<>(Arrays.asList(data1, data2));
         when(dbManager.getTableData("user")).thenReturn(data);
 
         command.execute("find:user");
         verify(view, atLeastOnce()).
-                drawTable(dbManager.getTableColumnNames("user"),dbManager.getTableData("user"));
-
-        /*
-        |-----------------------|
-        |id|username|password|
-        |-----------------------|
-        |8|sasha|love|
-        |20|dana|hope|
-        |-----------------------|
-         */
+                drawTable(dbManager.getTableColumnNames("user"), dbManager.getTableData("user"));
     }
 
     @Test
@@ -90,13 +71,6 @@ public class FindTest {
 
         verify(view, atLeastOnce()).
                 drawTable(dbManager.getTableColumnNames("user"),dbManager.getTableData("user"));
-
-        /*
-        |-----------------------|
-        |id|username|password|
-        |-----------------------|
-        |-----------------------|
-         */
     }
 
     @Test

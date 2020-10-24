@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class CommandTool {
     private static CommandTool commandTool;
 
-    public static synchronized CommandTool getCommandTool() {
+    public static CommandTool getCommandTool() {
         if (commandTool == null) {
             commandTool = new CommandTool();
         }
