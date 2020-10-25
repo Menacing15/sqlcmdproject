@@ -7,7 +7,7 @@
 2. IntelliJ IDEA
 3. PostgreSQL server
 
-#### To run test successfully you need create a database with: 
+#### To run test successfully you need to create a database with: 
 1. name - "sqlcmd"
 2. user - "postgres"
 3. password - "1234"
