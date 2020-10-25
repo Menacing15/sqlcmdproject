@@ -4,7 +4,7 @@
 ```
 #### To run the project you need:
 1. JDK 8
-2. IntelliJ IDEA
+2. IntelliJ IDEA / Eclipse
 3. PostgreSQL server
 
 #### To run test successfully you need to create a database with: 
