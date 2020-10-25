@@ -19,7 +19,7 @@
 
         Purpose: Connects to the DB.
 
-        Input: connect:database,user,password
+        Input: connect: database, user, password
             database - name of the database
             user - name of the user
             password - password to connect the server
@@ -82,7 +82,7 @@
         
 * **update**
 
-        Purpose: Updates record, sets column2 = value2, if column1 = value1
+        Purpose: Updates record, sets column2 = value2, columnN = valueN if column1 = value1
 
         Input: update: tableName, column1, value1, column2, value2
             tableName - name of the new table
