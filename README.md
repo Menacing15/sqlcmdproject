@@ -28,7 +28,7 @@
 
 * **help**
 
-        Purpose: Shows all available commands and their description 
+        Purpose: Shows all available commands and their description.
 
         Input: help
 
@@ -36,7 +36,7 @@
         
 * **tables**
 
-        Purpose: Print all table names in the database
+        Purpose: Print all table names in the database.
 
         Input: tables
 
@@ -44,7 +44,7 @@
         
 * **create**
 
-        Purpose: Creates a table with given column names
+        Purpose: Creates a table with given column names.
 
         Input: create: tableName, column1, type1, column2, type2,..., columnN, typeN
             tableName - name of the new table
@@ -55,11 +55,11 @@
             columnN - name of the N column
             typeN - type of the N column
 
-        Output: Message about successful execution of the command
+        Output: Message about successful execution of the command.
 
 * **find**
 
-        Purpose: Prints a table 
+        Purpose: Prints a table.
 
         Input: find:tableName
             tableName -  name of the sought table
@@ -67,7 +67,7 @@
         Output: Stylized table.
 * **insert**
 
-        Purpose: Inserts a value in a column
+        Purpose: Inserts a value in a column.
 
         Input: insert: tableName, column1, value1, column2, value2,...,columnN, valueN
             tableName - name of the new table
@@ -82,7 +82,7 @@
         
 * **update**
 
-        Purpose: Updates record, sets column2 = value2, columnN = valueN if column1 = value1
+        Purpose: Updates record, sets column2 = value2, columnN = valueN if column1 = value1.
 
         Input: update: tableName, column1, value1, column2, value2
             tableName - name of the new table
@@ -97,7 +97,7 @@
         
 * **clear**
 
-        Purpose: Clears all records in a table
+        Purpose: Clears all records in a table.
 
         Input: clear:tableName
           tableName - name of the cleared table
@@ -106,7 +106,7 @@
         
 * **drop**
 
-        Purpose: Deletes a table
+        Purpose: Deletes a table.
 
         Input: drop:tableName
             tableName - name of the deleted table
@@ -115,7 +115,7 @@
          
 * **delete**
 
-        Purpose: Deletes a specific records in a talbe
+        Purpose: Deletes a specific records in a talbe.
 
         Input: delete: tableName, column, value
             tableName  - name of the table
@@ -126,7 +126,7 @@
 
 * **exit**
 
-        Purpose: Shuts down a programm
+        Purpose: Shuts down a programm.
 
         Input: exit
 
