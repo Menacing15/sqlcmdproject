@@ -62,7 +62,7 @@
         Purpose: Prints a table 
 
         Input: find:tableName
-            tableName -  name of the new table
+            tableName -  name of the sought table
 
         Output: Stylized table.
 * **insert**
