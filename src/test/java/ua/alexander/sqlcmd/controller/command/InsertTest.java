@@ -1,7 +1,6 @@
 package ua.alexander.sqlcmd.controller.command;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
@@ -30,9 +29,9 @@ public class InsertTest {
     }
 
     @Test
-    public void testInsert(){
+    public void testInsert() {
         Data data = new DataImpl();
-        data.put("id","1");
+        data.put("id", "1");
 
         command.execute("insert:user,id,1");
         verify(dbManager).insertData("user", data);

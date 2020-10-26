@@ -25,7 +25,7 @@ public class UnsupportedTest {
     }
 
     @Test
-    public void testUnsupported(){
+    public void testUnsupported() {
         command.execute("unsupported");
         Mockito.verify(view).type("Sorry, such command doesn't exist! Try again!");
     }

@@ -7,9 +7,7 @@ import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-
 
 public class ConnectTest {
     private DataBaseManager dbManager;
@@ -43,20 +41,10 @@ public class ConnectTest {
         verify(view).type("Please enter your command! Type 'help' to see available commands.");
     }
 
-    @Test
-    public void testConnectWrongParameters() {
-        try {
-            command.execute("connect:sqlcmd");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Something is missing... Quantity of parameters is 2 ,but you need 4", e.getMessage());
-        }
-    }
-
     @Test(expected = RuntimeException.class)
     public void testConnectWrongPassword() {
         doThrow(RuntimeException.class).
                 when(dbManager).connect("sqlcmd", "postgres", "wrongPassword");
-        dbManager.connect("sqlcmd", "postgres", "wrongPassword");
-
+        command.execute("connect:sqlcmd,postgres,wrongPassword");
     }
 }

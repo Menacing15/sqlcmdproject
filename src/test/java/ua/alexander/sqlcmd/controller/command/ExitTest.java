@@ -6,16 +6,15 @@ import ua.alexander.sqlcmd.view.View;
 
 import static org.junit.Assert.*;
 
-
 public class ExitTest {
     private View view = Mockito.mock(View.class);
+
     @Test
-    public void testProcessAbleExit(){
+    public void testProcessAbleExit() {
         Command command = new Exit();
         boolean processAble = command.processAble("exit");
         assertTrue(processAble);
     }
-
 
     @Test
     public void testExecuteExitCommandThrowsExitException() {
@@ -27,5 +26,4 @@ public class ExitTest {
 
         }
     }
-
 }

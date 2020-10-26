@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
@@ -22,7 +21,7 @@ public class TablesTest {
     public void setup() {
         view = mock(View.class);
         dbManger = mock(DataBaseManager.class);
-        command = new Tables(view,dbManger);
+        command = new Tables(view, dbManger);
     }
 
     @Test
@@ -32,7 +31,7 @@ public class TablesTest {
     }
 
     @Test
-    public void testTables(){
+    public void testTables() {
         Mockito.when(dbManger.getTableNames()).thenReturn(new LinkedHashSet<>(Collections.singletonList("user")));
         command.execute("tables");
         Mockito.verify(dbManger).getTableNames();

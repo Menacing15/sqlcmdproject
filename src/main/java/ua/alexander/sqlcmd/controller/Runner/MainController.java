@@ -5,7 +5,6 @@ import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.Console;
 import ua.alexander.sqlcmd.view.View;
 
-
 public class MainController {
     private View view;
     private Command[] commands;

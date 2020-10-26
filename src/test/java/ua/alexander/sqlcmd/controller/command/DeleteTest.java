@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
@@ -30,10 +29,11 @@ public class DeleteTest {
     private View view;
     private Command command;
     private CommandTool tool;
-    public DeleteTest(){
+
+    public DeleteTest() {
         dbManager = mock(DataBaseManager.class);
         view = mock(View.class);
-        command = new Delete(view,dbManager);
+        command = new Delete(view, dbManager);
     }
 
     @Before
@@ -56,50 +56,23 @@ public class DeleteTest {
     }
 
     @Test
-    public void testExecuteDeleteWrongParameters() {
-        //given
-        String[] commandExample2 = {"drop", "user"};
-        String[] commandExample3 = {"drop", "user", "column"};
-
-        //when
-        Mockito.doThrow(new IllegalArgumentException("Something is missing... Quantity of parameters is 2 ,but you need 4")).
-                when(tool).validateCommandWithFixedSize(commandExample2, "delete:user,column,value");
-        //then
-        try {
-            command.execute("drop:user");
-        }catch(IllegalArgumentException e){
-            assertEquals("Something is missing... Quantity of parameters is 2 ,but you need 4", e.getMessage());
-        }
-
-        //when
-        Mockito.doThrow(new IllegalArgumentException("Something is missing... Quantity of parameters is 3 ,but you need 4")).
-                when(tool).validateCommandWithFixedSize(commandExample3, "delete:user,column,value");
-        //then
-        try {
-            command.execute("drop:user,column");
-        }catch(IllegalArgumentException e){
-            assertEquals("Something is missing... Quantity of parameters is 3 ,but you need 4", e.getMessage());
-        }
-    }
-
-    @Test
     public void testDeleteThenConfirm() {
         //given
         Data data1 = new DataImpl();
-        data1.put("id",8);
-        data1.put("username","sasha");
-        data1.put("password","love");
+        data1.put("id", 8);
+        data1.put("username", "sasha");
+        data1.put("password", "love");
 
         Data data2 = new DataImpl();
-        data2.put("id",20);
-        data2.put("username","dana");
-        data2.put("password","hope");
+        data2.put("id", 20);
+        data2.put("username", "dana");
+        data2.put("password", "hope");
 
         //when
         when(dbManager.getTableColumnNames("user")).
                 thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
 
-        List<Data> data = new LinkedList<>(Arrays.asList(data1,data2));
+        List<Data> data = new LinkedList<>(Arrays.asList(data1, data2));
         when(dbManager.getTableData("user")).thenReturn(data);
 
         //when
@@ -107,7 +80,7 @@ public class DeleteTest {
 
         command.execute("delete:user,username,sasha");
         //then
-        Mockito.verify(dbManager).deleteRecord("user","username","sasha");
+        Mockito.verify(dbManager).deleteRecord("user", "username", "sasha");
         Mockito.verify(view).drawTable(dbManager.getTableColumnNames("user"),
                 dbManager.getTableData("user"));
     }
@@ -116,20 +89,20 @@ public class DeleteTest {
     public void testDeleteThenDiscard() {
         //given
         Data data1 = new DataImpl();
-        data1.put("id",8);
-        data1.put("username","sasha");
-        data1.put("password","love");
+        data1.put("id", 8);
+        data1.put("username", "sasha");
+        data1.put("password", "love");
 
         Data data2 = new DataImpl();
-        data2.put("id",20);
-        data2.put("username","dana");
-        data2.put("password","hope");
+        data2.put("id", 20);
+        data2.put("username", "dana");
+        data2.put("password", "hope");
 
         //when
         when(dbManager.getTableColumnNames("user")).
                 thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
 
-        List<Data> data = new LinkedList<>(Arrays.asList(data1,data2));
+        List<Data> data = new LinkedList<>(Arrays.asList(data1, data2));
         when(dbManager.getTableData("user")).thenReturn(data);
 
         //when
@@ -137,10 +110,9 @@ public class DeleteTest {
 
         command.execute("delete:user,username,sasha");
         //then
-        Mockito.verify(dbManager,never()).deleteRecord("user","username","sasha");
+        Mockito.verify(dbManager, never()).deleteRecord("user", "username", "sasha");
         Mockito.verify(view, never()).drawTable(dbManager.getTableColumnNames("user"),
                 dbManager.getTableData("user"));
         Mockito.verify(view).type("Record wasn't deleted.");
     }
-
 }

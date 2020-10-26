@@ -152,7 +152,6 @@ public class JDBCDataBaseManager implements DataBaseManager {
         return values;
     }
 
-
     @Override
     public boolean isConnected() {
         return connection != null;

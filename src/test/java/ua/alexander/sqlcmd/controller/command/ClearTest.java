@@ -48,36 +48,6 @@ public class ClearTest {
         assertFalse(processAble);
     }
 
-
-    @Test
-    public void testExecuteClearingWrongParameters() {
-        //given
-        String[] commandExample2 = {"clear", "user", "user"};
-        String[] commandExample3 = {"clear", "user", "user"};
-
-        //when
-        Mockito.doThrow(new IllegalArgumentException("Something is missing... Quantity of parameters is 3 ,but you need 2")).
-                when(tool).validateCommandWithFixedSize(commandExample2, "clear:user");
-
-        //then
-        try {
-            command.execute("clear:user,user");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Something is missing... Quantity of parameters is 3 ,but you need 2", e.getMessage());
-        }
-
-       ///when
-        Mockito.doThrow(new IllegalArgumentException("Something is missing... Quantity of parameters is 3 ,but you need 2")).
-                when(tool).validateCommandWithFixedSize(commandExample3, "clear:user");
-
-        //then
-        try {
-            command.execute("clear:user:user");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Something is missing... Quantity of parameters is 3 ,but you need 2", e.getMessage());
-        }
-    }
-
     @Test
     public void testClearThenConfirm() {
         Mockito.when(tool.verification()).thenReturn(true);

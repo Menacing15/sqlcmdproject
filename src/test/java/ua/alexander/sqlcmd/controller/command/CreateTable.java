@@ -2,7 +2,6 @@ package ua.alexander.sqlcmd.controller.command;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
@@ -19,10 +18,9 @@ import static org.mockito.Mockito.*;
 @PrepareForTest(CommandTool.class)
 
 public class CreateTable {
-    DataBaseManager dbManager;
-    View view;
-    Command command;
-    private CommandTool tool;
+    private DataBaseManager dbManager;
+    private View view;
+    private Command command;
 
     public CreateTable() {
         dbManager = mock(DataBaseManager.class);
@@ -33,10 +31,9 @@ public class CreateTable {
     @Before
     public void setup() {
         PowerMockito.mockStatic(CommandTool.class);
-        tool = Mockito.mock(CommandTool.class);
+        CommandTool tool = Mockito.mock(CommandTool.class);
         when(CommandTool.getCommandTool()).thenReturn(tool);
     }
-
 
     @Test
     public void testProcessAbleCreateWithParameters() {
@@ -55,24 +52,5 @@ public class CreateTable {
         command.execute("create:test,id,numeric,name,text");
         verify(dbManager).createTable("test", "id numeric, name text");
         verify(view).type("Table 'test' was created successfully!");
-    }
-
-    @Test
-    public void testCreateWrongParam() {
-        String[] commandExample1 = {"create", "id", "numeric", "name"};
-
-        //when
-        Mockito.doThrow(new IllegalArgumentException("Something is missing... Quantity of parameters is 1 ,but you need 2")).
-                when(tool).validateCommandWithCustomSize(commandExample1, "create:test,id,numeric,name");
-        try{
-
-            command.execute("create:test,id,numeric,name");
-        }catch (IllegalArgumentException e){
-            assertEquals("Some parameters are missing. " +
-                    "The command should look like that: \n" +
-                    "'create:tableName,column1,value1,column2,value2...columnN,valueN', " +
-                    "but your is: 'create:test,id,numeric,name'", e.getMessage());
-        }
-        verify(dbManager, never()).createTable("test", "id numeric, name text");
     }
 }

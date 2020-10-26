@@ -4,7 +4,6 @@ import ua.alexander.sqlcmd.controller.tools.CommandTool;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.view.View;
 
-
 public class Connect implements Command {
     private static final String COMMAND_SAMPLE = "connect:sqlcmd,postgres,1234";
 

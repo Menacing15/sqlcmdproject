@@ -24,7 +24,6 @@ public class FindTest {
         command = new Find(view, dbManager);
     }
 
-
     @Test
     public void testProcessAbleFindWithParameters() {
         boolean processAble = command.processAble("find:user");
@@ -38,7 +37,7 @@ public class FindTest {
     }
 
     @Test
-    public void testPrintTable() {       //TODO как вывести таблицу????
+    public void testPrintTable() {
         when(dbManager.getTableColumnNames("user")).
                 thenReturn(new LinkedHashSet<>(Arrays.asList("id", "username", "password")));
 
@@ -71,20 +70,5 @@ public class FindTest {
 
         verify(view, atLeastOnce()).
                 drawTable(dbManager.getTableColumnNames("user"),dbManager.getTableData("user"));
-    }
-
-    @Test
-    public void testFindTableWrongParameters() {
-        try {
-            command.execute("find:");
-        }catch(IllegalArgumentException e){
-            assertEquals("Something is missing... Quantity of parameters is 1 ,but you need 2", e.getMessage());
-        }
-        try {
-            command.execute("find:find:user");
-        }catch(IllegalArgumentException e){
-            assertEquals("Something is missing... Quantity of parameters is 3 ,but you need 2", e.getMessage());
-        }
-
     }
 }
