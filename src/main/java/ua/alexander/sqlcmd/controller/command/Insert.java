@@ -32,7 +32,6 @@ public class Insert implements Command {
         for (int index = 2; index < input.length - 1; index = index + 2) {
             String columnName = input[index];
             String value = input[index + 1];
-
             data.put(columnName, value);
         }
         dbManager.insertData(tableName, data);
