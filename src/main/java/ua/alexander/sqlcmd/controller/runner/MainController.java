@@ -1,4 +1,4 @@
-package ua.alexander.sqlcmd.controller.Runner;
+package ua.alexander.sqlcmd.controller.runner;
 
 import ua.alexander.sqlcmd.controller.command.*;
 import ua.alexander.sqlcmd.module.DataBaseManager;

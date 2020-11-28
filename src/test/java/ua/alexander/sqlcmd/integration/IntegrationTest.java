@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import ua.alexander.sqlcmd.controller.Runner.Main;
+import ua.alexander.sqlcmd.controller.runner.Main;
 
 import java.io.PrintStream;
 
