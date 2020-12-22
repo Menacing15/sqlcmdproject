@@ -5,13 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ua.alexander.cmd-project</groupId>
-    <artifactId>sqlcmd-project</artifactId>
+    <artifactId>sqlcmd</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>war</packaging>
     <name>web console</name>
     <description>web console</description>
+
     <dependencies>
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -30,6 +37,13 @@
             <artifactId>junit</artifactId>
             <version>4.13.1</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -53,4 +67,19 @@
         <powermock.version>2.0.2</powermock.version>
         <java.version>1.8</java.version>
     </properties>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <port>8080</port>
+                    <path>/sqlcmd</path>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
