@@ -5,17 +5,26 @@
     <title>sqlcmd</title>
 </head>
 <body>
+<c:choose>
+    <c:when test="${dbname == null}">
+        Now not connected.
+        <br>
+    </c:when>
+    <c:otherwise>
+        Now connected to ' ${dbname} '.
+        <br>
+    </c:otherwise>
+</c:choose>
+<br>
     <form action="connect" method="post">
         <table>
             <tr>
                 <td>Database name</td>
-                <td><input type = "text" name = "dbname"/></td>
-
+                <td><input type = "text" name = "name"/></td>
             </tr>
             <tr>
                 <td>Username</td>
                 <td><input type = "text" name = "username"/></td>
-
             </tr>
             <tr>
                 <td>Password</td>
@@ -28,4 +37,5 @@
         </table>
     </form>
 </body>
+<%@ include file="footer.jsp" %>
 </html>

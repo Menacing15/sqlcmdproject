@@ -2,11 +2,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
+    <style>
+        p {
+            font-size: 1em;
+        }
+    </style>
     <title>sqlcmd</title>
 </head>
 <body>
+    <h3>Worst tool to work with databases. Only for you.♡</h3>
+
     <c:forEach items="${items}" var = "item">
-    <a href = "${item}">${item}</a><br>
+    <p><a href = "${item}">${item}</a></p>
     </c:forEach>
 </body>
 </html>

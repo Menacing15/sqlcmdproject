@@ -9,4 +9,5 @@
     <a href = "menu">Menu</a>
     <a href = "help">Help</a>
 </body>
+<%@ include file="footer.jsp" %>
 </html>
