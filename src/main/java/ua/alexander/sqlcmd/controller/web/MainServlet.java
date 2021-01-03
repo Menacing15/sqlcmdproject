@@ -36,6 +36,11 @@ public class MainServlet extends HttpServlet {
             req.getRequestDispatcher("help.jsp").forward(req, resp);
         } else if (action.startsWith("/connect")) {
             req.getRequestDispatcher("connect.jsp").forward(req, resp);
+        }else if (action.startsWith("/find")) {
+            resp.sendRedirect("/find");
+        }
+        else if (action.startsWith("/tables")) {
+            resp.sendRedirect("/tables");
         }
     }
 

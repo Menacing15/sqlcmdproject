@@ -4,10 +4,10 @@
     <title>sqlcmd</title>
 </head>
 <body>
-<form action="connect" method="post">
+<form action="find" method="post">
     <table>
         <tr>
-            <td>Table name</td>
+            <td>Enter the table's name</td>
             <td><input type = "text" name = "tableName"/></td>
         </tr>
     </table>

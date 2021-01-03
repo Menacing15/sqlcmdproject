@@ -4,7 +4,7 @@
 <head>
     <style>
         p {
-            font-size: 1em;
+            font-size: 1.2em;
         }
     </style>
     <title>sqlcmd</title>

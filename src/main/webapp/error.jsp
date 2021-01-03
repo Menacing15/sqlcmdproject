@@ -6,7 +6,6 @@
 </head>
 <body>
     Something went wrong... ${message}<br>
-    <a href = "menu">Menu</a>
     <a href = "help">Help</a>
 </body>
 <%@ include file="footer.jsp" %>

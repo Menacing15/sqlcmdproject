@@ -11,15 +11,24 @@
     <title>sqlcmd</title>
 </head>
 <body>
-    <table>
-        <c:forEach items = "${table}" var = "row">
-            <tr>
-            <c:forEach items = "${row}" var = "element">
-                <td>${element}</td>
+<c:choose>
+    <c:when test="${table == null}">
+        Such table doesn't exist.
+        <br>
+    </c:when>
+    <c:otherwise>
+        <table>
+            <c:forEach items = "${table}" var = "row">
+                <tr>
+                    <c:forEach items = "${row}" var = "element">
+                        <td>${element}</td>
+                    </c:forEach>
+                </tr>
             </c:forEach>
-            </tr>
-        </c:forEach>
-    </table>
+        </table>
+        <br>
+    </c:otherwise>
+</c:choose>
 </body>
 <%@ include file="footer.jsp" %>
 </html>
