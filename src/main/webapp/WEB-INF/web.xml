@@ -16,13 +16,24 @@
         <servlet-class>ua.alexander.sqlcmd.controller.web.FindServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>TablesServlet</servlet-name>
+        <servlet-class>ua.alexander.sqlcmd.controller.web.TablesServlet</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>MainServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>FindServlet</servlet-name>
         <url-pattern>/find</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
-        <servlet-name>MainServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>TablesServlet</servlet-name>
+        <url-pattern>/tables</url-pattern>
     </servlet-mapping>
 </web-app>

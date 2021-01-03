@@ -7,12 +7,13 @@ import ua.alexander.sqlcmd.module.JDBCDataBaseManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class ServiceImpl implements Service {
 
     @Override
     public List<String> commandsList() {
-        return Arrays.asList("help","connect","find");
+        return Arrays.asList("help","connect","tables", "find");
     }
 
     @Override
@@ -39,5 +40,10 @@ public class ServiceImpl implements Service {
             }
         }
         return result;
+    }
+
+    @Override
+    public Set<String> tables(DataBaseManager dataBaseManager) {
+        return dataBaseManager.getTableNames();
     }
 }
