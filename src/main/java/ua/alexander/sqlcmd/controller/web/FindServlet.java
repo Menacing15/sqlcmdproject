@@ -23,35 +23,22 @@ public class FindServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = getAction(req);
-
-        if (action.startsWith("/find")) {
-            req.getRequestDispatcher("prefind.jsp").forward(req, resp);
-        }
+        req.getRequestDispatcher("prefind.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String action = getAction(req);
+        DataBaseManager manager = (DataBaseManager) req.getSession().getAttribute("manager");
 
-        if (action.startsWith("/find")) {
-            DataBaseManager manager = (DataBaseManager) req.getSession().getAttribute("manager");
+        String tableName = req.getParameter("tableName");
 
-            String tableName = req.getParameter("tableName");
-
-            List<List<String>> result = service.find(manager, tableName);
-            if(result.get(0).isEmpty()) {
-                req.setAttribute("table", null);
-            }else {
-                req.setAttribute("table", result);
-            }
-
-            req.getRequestDispatcher("find.jsp").forward(req, resp);
+        List<List<String>> result = service.find(manager, tableName);
+        if (result.get(0).isEmpty()) {
+            req.setAttribute("table", null);
+        } else {
+            req.setAttribute("table", result);
         }
-    }
 
-    private String getAction(HttpServletRequest req) {
-        String requestURI = req.getRequestURI();
-        return requestURI.substring(req.getContextPath().length());
+        req.getRequestDispatcher("find.jsp").forward(req, resp);
     }
 }
