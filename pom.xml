@@ -12,6 +12,14 @@
     <name>web console</name>
     <description>web console</description>
 
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <powermock.version>2.0.2</powermock.version>
+        <java.version>1.8</java.version>
+        <org.springframework.version>5.2.8.RELEASE</org.springframework.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>jstl</groupId>
@@ -59,14 +67,19 @@
             <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
-    </dependencies>
 
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <powermock.version>2.0.2</powermock.version>
-        <java.version>1.8</java.version>
-    </properties>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>

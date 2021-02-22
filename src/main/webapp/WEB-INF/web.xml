@@ -6,6 +6,17 @@
 
     <display-name>sqlcmd</display-name>
 
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+
     <servlet>
         <servlet-name>MainServlet</servlet-name>
         <servlet-class>ua.alexander.sqlcmd.controller.web.MainServlet</servlet-class>
@@ -20,7 +31,6 @@
         <servlet-name>TablesServlet</servlet-name>
         <servlet-class>ua.alexander.sqlcmd.controller.web.TablesServlet</servlet-class>
     </servlet>
-
 
     <servlet-mapping>
         <servlet-name>MainServlet</servlet-name>
