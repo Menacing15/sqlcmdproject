@@ -1,5 +1,6 @@
 package ua.alexander.sqlcmd.service;
 
+import org.springframework.stereotype.Component;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.module.JDBCDataBaseManager;
@@ -9,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+@Component
 public class ServiceImpl implements Service {
 
     @Override

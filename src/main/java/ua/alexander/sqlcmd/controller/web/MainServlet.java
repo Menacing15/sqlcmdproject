@@ -1,9 +1,11 @@
 package ua.alexander.sqlcmd.controller.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.service.Service;
-import ua.alexander.sqlcmd.service.ServiceImpl;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,12 +13,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class MainServlet extends HttpServlet {
+
+    public void setService(Service service) {
+        this.service = service;
+    }
+
+    @Autowired
     private Service service;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        service = new ServiceImpl();
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
     @Override
@@ -67,6 +75,7 @@ public class MainServlet extends HttpServlet {
             resp.sendRedirect(resp.encodeRedirectURL("menu"));
             req.getSession().setAttribute("dbname",dbName);
         } catch (RuntimeException ex) {
+            ex.printStackTrace();
             req.setAttribute("message", ex.getMessage());
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
