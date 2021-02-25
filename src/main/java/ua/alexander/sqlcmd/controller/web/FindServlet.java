@@ -1,9 +1,11 @@
 package ua.alexander.sqlcmd.controller.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ua.alexander.sqlcmd.module.DataBaseManager;
-import ua.alexander.sqlcmd.service.Service;
-import ua.alexander.sqlcmd.service.ServiceImpl;
+import ua.alexander.sqlcmd.service.ServiceFactory;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +15,13 @@ import java.util.List;
 
 public class FindServlet extends HttpServlet {
 
-    private Service service;
+    @Autowired
+    private ServiceFactory serviceFactory;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        service = new ServiceImpl();
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
     @Override
@@ -32,7 +35,7 @@ public class FindServlet extends HttpServlet {
 
         String tableName = req.getParameter("tableName");
 
-        List<List<String>> result = service.find(manager, tableName);
+        List<List<String>> result = serviceFactory.getService().find(manager, tableName);
         if (result.get(0).isEmpty()) {
             req.setAttribute("table", null);
         } else {

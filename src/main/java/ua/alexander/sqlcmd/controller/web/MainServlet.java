@@ -3,7 +3,7 @@ package ua.alexander.sqlcmd.controller.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ua.alexander.sqlcmd.module.DataBaseManager;
-import ua.alexander.sqlcmd.service.Service;
+import ua.alexander.sqlcmd.service.ServiceFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -14,12 +14,8 @@ import java.io.IOException;
 
 public class MainServlet extends HttpServlet {
 
-    public void setService(Service service) {
-        this.service = service;
-    }
-
     @Autowired
-    private Service service;
+    private ServiceFactory serviceFactory;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -38,7 +34,7 @@ public class MainServlet extends HttpServlet {
         }
 
         if (action.startsWith("/menu") || action.equals("/")) {
-            req.setAttribute("items", service.commandsList());
+            req.setAttribute("items", serviceFactory.getService().commandsList());
             req.getRequestDispatcher("menu.jsp").forward(req, resp);
         } else if (action.startsWith("/help")) {
             req.getRequestDispatcher("help.jsp").forward(req, resp);
@@ -70,13 +66,12 @@ public class MainServlet extends HttpServlet {
         String user = req.getParameter("username");
         String password = req.getParameter("password");
         try {
-            DataBaseManager manager = service.connect(dbName, user, password);
+            DataBaseManager manager = serviceFactory.getService().connect(dbName, user, password);
             req.getSession().setAttribute("manager", manager);
-            resp.sendRedirect(resp.encodeRedirectURL("menu"));
             req.getSession().setAttribute("dbname",dbName);
+            resp.sendRedirect(resp.encodeRedirectURL("menu"));
         } catch (RuntimeException ex) {
             ex.printStackTrace();
-            req.setAttribute("message", ex.getMessage());
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
     }

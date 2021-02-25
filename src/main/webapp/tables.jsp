@@ -6,7 +6,7 @@
 </head>
 <body>
 Existing tables: <br>
-<c:forEach items="${tablenames}" var = "name">
+<c:forEach items="${tableNames}" var = "name">
     ${name}<br>
 </c:forEach>
 </body>

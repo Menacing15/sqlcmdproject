@@ -7,6 +7,10 @@
     http://www.springframework.org/schema/context
     https://www.springframework.org/schema/context/spring-context.xsd">
 
+    <bean id="serviceFactory" class="ua.alexander.sqlcmd.service.ServiceFactory">
+        <property name="service" ref="serviceImpl"/>
+    </bean>
+
     <context:annotation-config/>
     <context:component-scan base-package="ua.alexander.sqlcmd"/>
 </beans>

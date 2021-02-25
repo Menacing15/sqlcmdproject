@@ -1,9 +1,11 @@
 package ua.alexander.sqlcmd.controller.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ua.alexander.sqlcmd.module.DataBaseManager;
-import ua.alexander.sqlcmd.service.Service;
-import ua.alexander.sqlcmd.service.ServiceImpl;
+import ua.alexander.sqlcmd.service.ServiceFactory;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,18 +14,19 @@ import java.io.IOException;
 
 public class TablesServlet extends HttpServlet {
 
-    private Service service;
+    @Autowired
+    private ServiceFactory serviceFactory;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        service = new ServiceImpl();
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DataBaseManager manager = (DataBaseManager) req.getSession().getAttribute("manager");
-        req.setAttribute("tablenames", service.tables(manager));
+        req.setAttribute("tableNames", serviceFactory.getService().tables(manager));
         req.getRequestDispatcher("tables.jsp").forward(req, resp);
     }
 }
