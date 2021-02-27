@@ -11,6 +11,12 @@
         <property name="service" ref="serviceImpl"/>
     </bean>
 
+    <bean id="dataBaseManagerFactory" class="ua.alexander.sqlcmd.service.DataBaseManagerFactoryImpl">
+        <property name="dataBaseManager" ref="jdbcDataBaseManager"/>
+    </bean>
+
+    <bean id="jdbcDataBaseManager" class="ua.alexander.sqlcmd.module.JDBCDataBaseManager"/>
+
     <context:annotation-config/>
     <context:component-scan base-package="ua.alexander.sqlcmd"/>
 </beans>

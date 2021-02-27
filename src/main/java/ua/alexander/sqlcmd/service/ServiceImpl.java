@@ -1,9 +1,9 @@
 package ua.alexander.sqlcmd.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
-import ua.alexander.sqlcmd.module.JDBCDataBaseManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +13,9 @@ import java.util.Set;
 @Component
 public class ServiceImpl implements Service {
 
+    @Autowired
+    private DataBaseManagerFactory dataBaseManagerFactory;
+
     @Override
     public List<String> commandsList() {
         return Arrays.asList("help","connect","tables", "find");
@@ -20,7 +23,7 @@ public class ServiceImpl implements Service {
 
     @Override
     public DataBaseManager connect(String dbName, String user, String password) {
-        DataBaseManager dbManager = new JDBCDataBaseManager();
+        DataBaseManager dbManager = dataBaseManagerFactory.createManager();
         dbManager.connect(dbName, user, password);
         return dbManager;
     }

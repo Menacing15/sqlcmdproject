@@ -13,8 +13,4 @@ public interface Service {
     List<List<String>> find(DataBaseManager dataBaseManager, String tableName);
 
     Set<String> tables(DataBaseManager dataBaseManager);
-
-
-
-
 }
