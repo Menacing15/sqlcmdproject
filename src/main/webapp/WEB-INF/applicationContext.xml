@@ -7,15 +7,31 @@
     http://www.springframework.org/schema/context
     https://www.springframework.org/schema/context/spring-context.xsd">
 
+    <bean id="service" class="ua.alexander.sqlcmd.service.ServiceImpl" scope="prototype">
+        <property name="commands">
+            <list>
+                <value>help</value>
+                <value>connect</value>
+                <value>tables</value>
+                <value>find</value>
+                <value>create</value>
+                <value>drop</value>
+                <value>insert</value>
+                <value>delete</value>
+                <value>update</value>
+            </list>
+        </property>
+    </bean>
+
     <bean id="serviceFactory" class="ua.alexander.sqlcmd.service.ServiceFactory">
-        <property name="service" ref="serviceImpl"/>
+        <property name="service" ref="service"/>
     </bean>
 
     <bean id="dataBaseManagerFactory" class="ua.alexander.sqlcmd.service.DataBaseManagerFactoryImpl">
         <property name="dataBaseManager" ref="jdbcDataBaseManager"/>
     </bean>
 
-    <bean id="jdbcDataBaseManager" class="ua.alexander.sqlcmd.module.JDBCDataBaseManager"/>
+    <bean id="jdbcDataBaseManager" class="ua.alexander.sqlcmd.module.JDBCDataBaseManager" scope="prototype"/>
 
     <context:annotation-config/>
     <context:component-scan base-package="ua.alexander.sqlcmd"/>
