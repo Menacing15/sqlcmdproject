@@ -35,7 +35,7 @@ public class FindServlet extends HttpServlet {
 
         String tableName = req.getParameter("tableName");
 
-        List<List<String>> result = serviceFactory.getService().find(manager, tableName);
+        List<List<String>> result = serviceFactory.getService().find(tableName);
         if (result.get(0).isEmpty()) {
             req.setAttribute("table", null);
         } else {

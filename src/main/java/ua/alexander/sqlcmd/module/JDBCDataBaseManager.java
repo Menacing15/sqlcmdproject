@@ -103,8 +103,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     public void insertData(String tableName, Data input) {
-        String tableNames = formatNames(input, "%s,");
-        String values = formatValues(input, "'%s',");
+        String tableNames = formatNames(input);
+        String values = formatValues(input);
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(String.format("INSERT INTO public." + tableName + "(%s)VALUES (%s)", tableNames, values));
         } catch (SQLException e) {
@@ -134,19 +134,19 @@ public class JDBCDataBaseManager implements DataBaseManager {
         }
     }
 
-    private String formatNames(Data input, String format) {
+    private String formatNames(Data input) {
         String names = "";
         for (String name : input.getNames()) {
-            names += String.format(format, name);
+            names += String.format("%s,", name);
         }
         names = names.substring(0, names.length() - 1);
         return names;
     }
 
-    private String formatValues(Data input, String format) {
+    private String formatValues(Data input) {
         String values = "";
         for (Object value : input.getValues()) {
-            values += String.format(format, value);
+            values += String.format("'%s',", value);
         }
         values = values.substring(0, values.length() - 1);
         return values;

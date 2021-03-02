@@ -26,7 +26,7 @@ public class TablesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DataBaseManager manager = (DataBaseManager) req.getSession().getAttribute("manager");
-        req.setAttribute("tableNames", serviceFactory.getService().tables(manager));
+        req.setAttribute("tableNames", serviceFactory.getService().tables());
         req.getRequestDispatcher("tables.jsp").forward(req, resp);
     }
 }

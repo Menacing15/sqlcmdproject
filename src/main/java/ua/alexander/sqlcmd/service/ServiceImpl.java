@@ -25,11 +25,11 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public List<List<String>> find(DataBaseManager dataBaseManager, String tableName) {
+    public List<List<String>> find(String tableName) {
         List<List<String>> result = new ArrayList<>();
 
-        List<String> columns = new ArrayList<>(dataBaseManager.getTableColumnNames(tableName));
-        List<Data> table = dataBaseManager.getTableData(tableName);
+        List<String> columns = new ArrayList<>(manager.getTableColumnNames(tableName));
+        List<Data> table = manager.getTableData(tableName);
 
         result.add(columns);
 
@@ -44,8 +44,8 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public Set<String> tables(DataBaseManager dataBaseManager) {
-        return dataBaseManager.getTableNames();
+    public Set<String> tables() {
+        return manager.getTableNames();
     }
 
     public void setCommands(List<String> commands) {

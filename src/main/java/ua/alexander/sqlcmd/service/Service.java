@@ -10,7 +10,7 @@ public interface Service {
 
     DataBaseManager connect(String dbName, String user, String password);
 
-    List<List<String>> find(DataBaseManager dataBaseManager, String tableName);
+    List<List<String>> find(String tableName);
 
-    Set<String> tables(DataBaseManager dataBaseManager);
+    Set<String> tables();
 }
