@@ -10,8 +10,7 @@ import java.util.Set;
 
 public class ServiceImpl implements Service {
 
-    @Autowired
-    private DataBaseManagerFactory dataBaseManagerFactory;
+    private DataBaseManager manager;
 
     private List<String> commands;
 
@@ -22,9 +21,8 @@ public class ServiceImpl implements Service {
 
     @Override
     public DataBaseManager connect(String dbName, String user, String password) {
-        DataBaseManager dbManager = dataBaseManagerFactory.createManager();
-        dbManager.connect(dbName, user, password);
-        return dbManager;
+        manager.connect(dbName, user, password);
+        return manager;
     }
 
     @Override
@@ -53,5 +51,9 @@ public class ServiceImpl implements Service {
 
     public void setCommands(List<String> commands) {
         this.commands = commands;
+    }
+
+    public void setManager(DataBaseManager manager) {
+        this.manager = manager;
     }
 }
