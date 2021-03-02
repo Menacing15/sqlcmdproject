@@ -8,7 +8,9 @@
     https://www.springframework.org/schema/context/spring-context.xsd">
 
     <bean id="service" class="ua.alexander.sqlcmd.service.ServiceImpl" scope="prototype">
-        <property name="manager" ref="jdbcDataBaseManager"/>
+        <property name="manager">
+            <bean  class="ua.alexander.sqlcmd.module.JDBCDataBaseManager"/>
+        </property>
         <property name="commands">
             <list>
                 <value>help</value>
@@ -27,8 +29,6 @@
     <bean id="serviceFactory" class="ua.alexander.sqlcmd.service.ServiceFactory">
         <property name="service" ref="service"/>
     </bean>
-
-    <bean id="jdbcDataBaseManager" class="ua.alexander.sqlcmd.module.JDBCDataBaseManager" scope="prototype"/>
 
     <context:annotation-config/>
     <context:component-scan base-package="ua.alexander.sqlcmd"/>

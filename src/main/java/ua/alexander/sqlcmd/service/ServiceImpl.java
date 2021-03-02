@@ -1,6 +1,5 @@
 package ua.alexander.sqlcmd.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import ua.alexander.sqlcmd.module.Data;
 import ua.alexander.sqlcmd.module.DataBaseManager;
 
