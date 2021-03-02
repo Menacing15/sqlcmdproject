@@ -18,8 +18,6 @@ public class MainController {
                 new IsConnected(view, dbManager),
                 new Insert(view, dbManager),
                 new Update(view, dbManager),
-                new Tables(view, dbManager),
-                new Find(view, dbManager),
                 new Clear(view, dbManager),
                 new Create(view, dbManager),
                 new Drop(view, dbManager),
