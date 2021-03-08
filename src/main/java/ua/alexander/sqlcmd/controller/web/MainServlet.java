@@ -28,7 +28,7 @@ public class MainServlet extends HttpServlet {
         String action = getAction(req);
 
         DataBaseManager manager = (DataBaseManager) req.getSession().getAttribute("manager");
-        if (manager == null && !(action.startsWith("/menu") || action.startsWith("/help")))  {
+        if (manager == null && !(action.startsWith("/menu") || action.startsWith("/help"))) {
             req.getRequestDispatcher("connect.jsp").forward(req, resp);
             return;
         }
@@ -40,20 +40,20 @@ public class MainServlet extends HttpServlet {
             req.getRequestDispatcher("help.jsp").forward(req, resp);
         } else if (action.startsWith("/connect")) {
             req.getRequestDispatcher("connect.jsp").forward(req, resp);
-        }else if (action.startsWith("/find")) {
+        } else if (action.startsWith("/find")) {
             resp.sendRedirect("/find");
         } else if (action.startsWith("/tables")) {
             resp.sendRedirect("/tables");
+        } else if (action.startsWith("/create")) {
+            resp.sendRedirect("/create");
+        } else if (action.startsWith("/drop")) {
+            resp.sendRedirect("/drop");
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = getAction(req);
-
-        if (action.startsWith("/connect")) {
-            establishConnection(req, resp);
-        }
+        establishConnection(req, resp);
     }
 
     private String getAction(HttpServletRequest req) {
@@ -68,10 +68,11 @@ public class MainServlet extends HttpServlet {
         try {
             DataBaseManager manager = serviceFactory.getService().connect(dbName, user, password);
             req.getSession().setAttribute("manager", manager);
-            req.getSession().setAttribute("dbname",dbName);
+            req.getSession().setAttribute("dbname", dbName);
             resp.sendRedirect(resp.encodeRedirectURL("menu"));
         } catch (RuntimeException ex) {
             ex.printStackTrace();
+            req.setAttribute(ex.getMessage(),"errorMessage");
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
     }

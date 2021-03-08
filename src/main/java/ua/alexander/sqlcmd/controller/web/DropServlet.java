@@ -10,9 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-public class FindServlet extends HttpServlet {
+public class DropServlet extends HttpServlet {
 
     @Autowired
     private ServiceFactory serviceFactory;
@@ -31,13 +30,13 @@ public class FindServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String tableName = req.getParameter("tableName");
-
-        List<List<String>> result = serviceFactory.getService().find(tableName);
-        if (result.get(0).isEmpty()) {
-            req.setAttribute("table", null);
-        } else {
-            req.setAttribute("table", result);
+        try {
+            serviceFactory.getService().drop(tableName);
+            req.getRequestDispatcher("drop.jsp").forward(req, resp);
+        } catch (RuntimeException ex) {
+            ex.printStackTrace();
+            req.setAttribute("errorMessage", ex.getMessage());
+            req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
-        req.getRequestDispatcher("find.jsp").forward(req, resp);
     }
 }

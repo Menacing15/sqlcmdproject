@@ -2,7 +2,6 @@ package ua.alexander.sqlcmd.controller.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-import ua.alexander.sqlcmd.module.DataBaseManager;
 import ua.alexander.sqlcmd.service.ServiceFactory;
 
 import javax.servlet.ServletConfig;
@@ -25,7 +24,6 @@ public class TablesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        DataBaseManager manager = (DataBaseManager) req.getSession().getAttribute("manager");
         req.setAttribute("tableNames", serviceFactory.getService().tables());
         req.getRequestDispatcher("tables.jsp").forward(req, resp);
     }

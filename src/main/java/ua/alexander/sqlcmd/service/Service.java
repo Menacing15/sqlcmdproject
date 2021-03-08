@@ -13,4 +13,6 @@ public interface Service {
     List<List<String>> find(String tableName);
 
     Set<String> tables();
+
+    void drop(String tableName);
 }

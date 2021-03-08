@@ -37,5 +37,13 @@
         </table>
     </form>
 </body>
-<%@ include file="footer.jsp" %>
+<c:choose>
+    <c:when test="${manager == null}">
+        <br>
+    </c:when>
+    <c:otherwise>
+        <%@ include file="footer.jsp" %>
+        <br>
+    </c:otherwise>
+</c:choose>
 </html>

@@ -48,6 +48,11 @@ public class ServiceImpl implements Service {
         return manager.getTableNames();
     }
 
+    @Override
+    public void drop(String tableName) {
+        manager.dropTable(tableName);
+    }
+
     public void setCommands(List<String> commands) {
         this.commands = commands;
     }

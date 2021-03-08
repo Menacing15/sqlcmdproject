@@ -7,7 +7,7 @@
 <body>
 Existing tables: <br>
 <c:forEach items="${tableNames}" var = "name">
-    ${name}<br>
+    <p>${name}</p>
 </c:forEach>
 </body>
 <%@ include file="footer.jsp" %>

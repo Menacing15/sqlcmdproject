@@ -32,6 +32,11 @@
         <servlet-class>ua.alexander.sqlcmd.controller.web.TablesServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>DropServlet</servlet-name>
+        <servlet-class>ua.alexander.sqlcmd.controller.web.DropServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>MainServlet</servlet-name>
         <url-pattern>/</url-pattern>
@@ -45,5 +50,10 @@
     <servlet-mapping>
         <servlet-name>TablesServlet</servlet-name>
         <url-pattern>/tables</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DropServlet</servlet-name>
+        <url-pattern>/drop</url-pattern>
     </servlet-mapping>
 </web-app>

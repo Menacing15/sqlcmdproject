@@ -5,8 +5,8 @@
     <title>sqlcmd</title>
 </head>
 <body>
-    Something went wrong... ${errorMessage}<br>
-    <a href = "help">Help</a>
+Table ${tableName} was dropped.<br>
 </body>
 <%@ include file="footer.jsp" %>
 </html>
+
