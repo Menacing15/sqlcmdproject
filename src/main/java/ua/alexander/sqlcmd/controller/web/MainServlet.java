@@ -32,14 +32,13 @@ public class MainServlet extends HttpServlet {
             req.getRequestDispatcher("connect.jsp").forward(req, resp);
             return;
         }
-
         if (action.startsWith("/menu") || action.equals("/")) {
             req.setAttribute("items", serviceFactory.getService().commandsList());
-            req.getRequestDispatcher("menu.jsp").forward(req, resp);
+            goToJSP(req, resp, "menu.jsp");
         } else if (action.startsWith("/help")) {
-            req.getRequestDispatcher("help.jsp").forward(req, resp);
+            goToJSP(req, resp, "help.jsp");
         } else if (action.startsWith("/connect")) {
-            req.getRequestDispatcher("connect.jsp").forward(req, resp);
+            goToJSP(req, resp, "connect.jsp");
         } else if (action.startsWith("/find")) {
             resp.sendRedirect("/find");
         } else if (action.startsWith("/tables")) {
@@ -75,5 +74,9 @@ public class MainServlet extends HttpServlet {
             req.setAttribute(ex.getMessage(),"errorMessage");
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
+    }
+
+    private void goToJSP(HttpServletRequest req, HttpServletResponse resp, String jsp) throws ServletException, IOException {
+        req.getRequestDispatcher(jsp).forward(req, resp);
     }
 }

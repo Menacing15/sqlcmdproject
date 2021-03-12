@@ -20,15 +20,21 @@
         <table>
             <tr>
                 <td>Database name</td>
-                <td><input type = "text" name = "name"/></td>
+                <td><label>
+                    <input type = "text" name = "name"/>
+                </label></td>
             </tr>
             <tr>
                 <td>Username</td>
-                <td><input type = "text" name = "username"/></td>
+                <td><label>
+                    <input type = "text" name = "username"/>
+                </label></td>
             </tr>
             <tr>
                 <td>Password</td>
-                <td><input type = "password" name = "password"/></td>
+                <td><label>
+                    <input type = "password" name = "password"/>
+                </label></td>
             </tr>
             <tr>
                 <td></td>

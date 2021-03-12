@@ -44,7 +44,7 @@
 
     <servlet-mapping>
         <servlet-name>FindServlet</servlet-name>
-        <url-pattern>/find</url-pattern>
+        <url-pattern>/find/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
