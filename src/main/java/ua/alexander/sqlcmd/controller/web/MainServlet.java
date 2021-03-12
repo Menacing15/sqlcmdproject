@@ -27,32 +27,42 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
 
-        DataBaseManager manager = (DataBaseManager) req.getSession().getAttribute("manager");
-        if (manager == null && !(action.startsWith("/menu") || action.startsWith("/help"))) {
-            req.getRequestDispatcher("connect.jsp").forward(req, resp);
-            return;
-        }
-        if (action.startsWith("/menu") || action.equals("/")) {
-            req.setAttribute("items", serviceFactory.getService().commandsList());
-            goToJSP(req, resp, "menu.jsp");
-        } else if (action.startsWith("/help")) {
-            goToJSP(req, resp, "help.jsp");
-        } else if (action.startsWith("/connect")) {
-            goToJSP(req, resp, "connect.jsp");
-        } else if (action.startsWith("/find")) {
-            resp.sendRedirect("/find");
-        } else if (action.startsWith("/tables")) {
-            resp.sendRedirect("/tables");
-        } else if (action.startsWith("/create")) {
-            resp.sendRedirect("/create");
-        } else if (action.startsWith("/drop")) {
-            resp.sendRedirect("/drop");
+        try {
+            DataBaseManager manager = getManager(req);
+            if (manager == null && !(action.startsWith("/menu") || action.startsWith("/help"))) {
+                req.getRequestDispatcher("connect.jsp").forward(req, resp);
+                return;
+            }
+            if (action.startsWith("/menu") || action.equals("/")) {
+                req.setAttribute("items", serviceFactory.getService().commandsList());
+                goToJSP(req, resp, "menu.jsp");
+            } else if (action.startsWith("/help")) {
+                goToJSP(req, resp, "help.jsp");
+            } else if (action.startsWith("/connect")) {
+                goToJSP(req, resp, "connect.jsp");
+            } else if (action.startsWith("/find")) {
+                resp.sendRedirect("/find");
+            } else if (action.startsWith("/tables")) {
+                resp.sendRedirect("/tables");
+            } else if (action.startsWith("/create")) {
+                resp.sendRedirect("/create");
+            } else if (action.startsWith("/drop")) {
+                resp.sendRedirect("/drop");
+            }
+        } catch (RuntimeException ex) {
+            ex.printStackTrace();
+            req.setAttribute(ex.getMessage(), "errorMessage");
+            req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         establishConnection(req, resp);
+    }
+
+    private DataBaseManager getManager(HttpServletRequest req) {
+        return (DataBaseManager) req.getSession().getAttribute("manager");
     }
 
     private String getAction(HttpServletRequest req) {
@@ -64,16 +74,11 @@ public class MainServlet extends HttpServlet {
         String dbName = req.getParameter("name");
         String user = req.getParameter("username");
         String password = req.getParameter("password");
-        try {
-            DataBaseManager manager = serviceFactory.getService().connect(dbName, user, password);
-            req.getSession().setAttribute("manager", manager);
-            req.getSession().setAttribute("dbname", dbName);
-            resp.sendRedirect(resp.encodeRedirectURL("menu"));
-        } catch (RuntimeException ex) {
-            ex.printStackTrace();
-            req.setAttribute(ex.getMessage(),"errorMessage");
-            req.getRequestDispatcher("error.jsp").forward(req, resp);
-        }
+
+        DataBaseManager manager = serviceFactory.getService().connect(dbName, user, password);
+        req.getSession().setAttribute("manager", manager);
+        req.getSession().setAttribute("dbname", dbName);
+        resp.sendRedirect(resp.encodeRedirectURL("menu"));
     }
 
     private void goToJSP(HttpServletRequest req, HttpServletResponse resp, String jsp) throws ServletException, IOException {

@@ -19,15 +19,15 @@ public class JDBCDataBaseManager implements DataBaseManager {
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + database, user, password);
         } catch (SQLException e) {
             connection = null;
-            throw new RuntimeException(String.format("Can't get connection to database '%s', with the user: '%s'", database, user), e);
+            throw new RuntimeException("Can't get connection to database " + database + "with the user: " + user, e);
         }
     }
 
     public Set<String> getTableNames() {
+        String query = "SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = 'public'";
         Set<String> tables = new LinkedHashSet<>();
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(String.format("SELECT table_name FROM information_schema.tables " +
-                     "WHERE table_type = 'BASE TABLE' AND table_schema = 'public'"))) {
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 tables.add(resultSet.getString("table_name"));
             }
@@ -41,9 +41,10 @@ public class JDBCDataBaseManager implements DataBaseManager {
     @Override
     public Set<String> getTableColumnNames(String tableName) {
         Set<String> names = new LinkedHashSet<>();
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM INFORMATION_SCHEMA." +
-                     "COLUMNS WHERE TABLE_NAME = '%s'", tableName))) {
+        String query = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, tableName);
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 names.add(resultSet.getString("column_name"));
             }
@@ -56,8 +57,10 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     public List<Data> getTableData(String tableName) {
         List<Data> output = new ArrayList<>();
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM public.%s", tableName))) {
+        String query = "SELECT * FROM " + tableName;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, tableName);
+            ResultSet resultSet = statement.executeQuery(query);
             ResultSetMetaData resultSetMD = resultSet.getMetaData();
             while (resultSet.next()) {
                 Data data = new DataImpl();
@@ -75,50 +78,60 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     public void clearTable(String tableName) {
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(String.format("DELETE FROM public.%s", tableName));
+        String query = "DELETE FROM" + tableName;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.executeUpdate();
         } catch (SQLException e) {
             String[] message = e.getMessage().split("[\n]");
-            throw new RuntimeException(String.format("Can't clear table '%s' ", tableName) + message[0]);
+            throw new RuntimeException("Can't clear table " + tableName + message[0]);
         }
     }
 
     public void dropTable(String tableName) {
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(String.format("DROP TABLE public.%s", tableName));
+        String query = "DROP TABLE " + tableName;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.executeUpdate();
         } catch (SQLException e) {
             String[] message = e.getMessage().split("[\n]");
-            throw new RuntimeException(String.format("Can't drop table '%s' ", tableName) + message[0]);
+            throw new RuntimeException("Can't drop table " + tableName + message[0]);
         }
     }
 
     @Override
     public void createTable(String tableName, String data) {
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(String.format("CREATE TABLE public.%s(%s);", tableName, data));
+        String query = "CREATE TABLE " + tableName + "(?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, data);
+            statement.executeUpdate();
         } catch (SQLException e) {
             String[] message = e.getMessage().split("[\n]");
-            throw new RuntimeException(String.format("Can't create table '%s' ", tableName) + message[0]);
+            throw new RuntimeException("Can't create table " + tableName + message[0]);
         }
     }
 
     public void insertData(String tableName, Data input) {
+        String query = "INSERT INTO " + tableName + "(?)VALUES (?)";
         String tableNames = formatNames(input);
         String values = formatValues(input);
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(String.format("INSERT INTO public." + tableName + "(%s)VALUES (%s)", tableNames, values));
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, tableNames);
+            statement.setString(2, values);
+            statement.executeUpdate();
         } catch (SQLException e) {
             String[] message = e.getMessage().split("[\n]");
-            throw new RuntimeException(String.format("Can't insert in table '%s'. " +
-                    "Column names: '%s', values %s ", tableName, tableNames, values) + message[0]);
+            throw new RuntimeException("Can't insert in table " + tableName +
+                    "Column names: " + tableNames + ", values: " + values + message[0]);
         }
     }
 
     @Override
     public void deleteRecord(String tableName, String columnName, String value) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE public.%s SET %s = '' WHERE %s = '%s'",
-                tableName, columnName, columnName, value))) {
-            preparedStatement.executeUpdate();
+        String query = "UPDATE " + tableName + " SET ? = '' WHERE ? = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, columnName);
+            statement.setString(2, columnName);
+            statement.setString(3, value);
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -126,30 +139,32 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public void updateTable(String tableName, String checkValue, String newValue) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(String.format("UPDATE public.%s SET %sWHERE %s",
-                tableName, newValue, checkValue))) {
-            preparedStatement.executeUpdate();
+        String query = "UPDATE " + tableName + " SET ? WHERE ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, checkValue);
+            statement.setString(2, newValue);
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
     private String formatNames(Data input) {
-        String names = "";
+        StringBuilder names = new StringBuilder();
         for (String name : input.getNames()) {
-            names += String.format("%s,", name);
+            names.append(name).append(",");
         }
-        names = names.substring(0, names.length() - 1);
-        return names;
+        names = new StringBuilder(names.substring(0, names.length() - 1));
+        return names.toString();
     }
 
     private String formatValues(Data input) {
-        String values = "";
+        StringBuilder values = new StringBuilder();
         for (Object value : input.getValues()) {
-            values += String.format("'%s',", value);
+            values.append("'").append(value).append("',");
         }
-        values = values.substring(0, values.length() - 1);
-        return values;
+        values = new StringBuilder(values.substring(0, values.length() - 1));
+        return values.toString();
     }
 
     @Override
