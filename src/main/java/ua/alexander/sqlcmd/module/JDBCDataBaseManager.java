@@ -57,7 +57,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     public List<Data> getTableData(String tableName) {
         List<Data> output = new ArrayList<>();
-        String query = "SELECT * FROM " + tableName;
+        String query = "SELECT * FROM public." + tableName;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, tableName);
             ResultSet resultSet = statement.executeQuery(query);
@@ -78,7 +78,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     public void clearTable(String tableName) {
-        String query = "DELETE FROM" + tableName;
+        String query = "DELETE FROM public." + tableName;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -88,7 +88,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     public void dropTable(String tableName) {
-        String query = "DROP TABLE " + tableName;
+        String query = "DROP TABLE public." + tableName;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -99,7 +99,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public void createTable(String tableName, String data) {
-        String query = "CREATE TABLE " + tableName + "(?)";
+        String query = "CREATE TABLE public." + tableName + "(?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, data);
             statement.executeUpdate();
@@ -110,7 +110,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     public void insertData(String tableName, Data input) {
-        String query = "INSERT INTO " + tableName + "(?)VALUES (?)";
+        String query = "INSERT INTO public." + tableName + "(?)VALUES (?)";
         String tableNames = formatNames(input);
         String values = formatValues(input);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -126,7 +126,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public void deleteRecord(String tableName, String columnName, String value) {
-        String query = "UPDATE " + tableName + " SET ? = '' WHERE ? = ?";
+        String query = "UPDATE public." + tableName + " SET ? = '' WHERE ? = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, columnName);
             statement.setString(2, columnName);
@@ -139,7 +139,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public void updateTable(String tableName, String checkValue, String newValue) {
-        String query = "UPDATE " + tableName + " SET ? WHERE ?";
+        String query = "UPDATE public." + tableName + " SET ? WHERE ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, checkValue);
             statement.setString(2, newValue);
