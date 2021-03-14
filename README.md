@@ -1,6 +1,6 @@
-# Sqlcmd Project
+# SqlTool Project
 ```sh
- Sqlcmd - browser clienet for working with databases, created in PostgreSql.
+ SqlTool - browser clienet for working with databases, created in PostgreSql.
 ```
 #### To run the project you need:
 1. JDK 8
