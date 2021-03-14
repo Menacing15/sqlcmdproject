@@ -1,6 +1,6 @@
 # Sqlcmd Project
 ```sh
- Sqlcmd - console clinet for working with databases, created in PostreSql.
+ Sqlcmd - console client for working with databases, created in PostgreSql.
 ```
 #### To run the project you need:
 1. JDK 8
