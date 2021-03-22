@@ -1,4 +1,4 @@
-package ua.alexander.sqlcmd.controller.web;
+package ua.alexander.sqlcmd.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class DropServlet extends HttpServlet {
+public class TablesServlet extends HttpServlet {
 
     @Autowired
     private ServiceFactory serviceFactory;
@@ -24,19 +24,7 @@ public class DropServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("submit_name.jsp").forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String tableName = req.getParameter("tableName");
-        try {
-            serviceFactory.getService().drop(tableName);
-            req.getRequestDispatcher("drop.jsp").forward(req, resp);
-        } catch (RuntimeException ex) {
-            ex.printStackTrace();
-            req.setAttribute("errorMessage", ex.getMessage());
-            req.getRequestDispatcher("error.jsp").forward(req, resp);
-        }
+        req.setAttribute("tableNames", serviceFactory.getService().tables());
+        req.getRequestDispatcher("tables.jsp").forward(req, resp);
     }
 }

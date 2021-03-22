@@ -1,9 +1,12 @@
 package ua.alexander.sqlcmd.module;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -11,32 +14,39 @@ import static org.junit.Assert.assertTrue;
 
 public abstract class DataBaseManagerTest {
 
-    private DataBaseManager jdbcDBManager;
+    private static DataBaseManager manager;
 
     public abstract DataBaseManager getDataBaseManager();
 
-    @Before
-    public void setup() {
-        jdbcDBManager = getDataBaseManager();
-        jdbcDBManager.connect("sqlcmd", "postgres", "1234");
-        jdbcDBManager.clearTable("user");
+    @BeforeClass
+    public static void setup() {
+        try (FileReader fileReader = new FileReader("src\\main\\resources\\database.properties")) {
+            Properties properties = new Properties();
+            properties.load(fileReader);
+            String database = properties.getProperty("databaseName");
+            String user = properties.getProperty("user");
+            String password = properties.getProperty("password");
+            manager.connect(database, user, password);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void testIsConnected() {
-        assertTrue(jdbcDBManager.isConnected());
+        assertTrue(manager.isConnected());
     }
 
     @Test
     public void testGetTableNames() {
-        Set<String> tableNames = jdbcDBManager.getTableNames();
+        Set<String> tableNames = manager.getTableNames();
         System.out.println(tableNames);
-        assertEquals("[user]", tableNames.toString());
+        assertEquals("[]", tableNames.toString());
     }
 
     @Test
     public void testGetTableColumnNames() {
-        Set<String> columnNames = jdbcDBManager.getTableColumnNames("user");
+        Set<String> columnNames = manager.getTableColumnNames("user");
         assertEquals("[id, username, password]", columnNames.toString());
     }
 
@@ -46,9 +56,9 @@ public abstract class DataBaseManagerTest {
         data.put("id", 8);
         data.put("username", "dana");
         data.put("password", "qwerty");
-        jdbcDBManager.insertData("user", data);
+        manager.insertData("user", data);
 
-        List<Data> users = jdbcDBManager.getTableData("user");
+        List<Data> users = manager.getTableData("user");
         Data user = users.get(0);
 
         assertEquals("[id, username, password]", user.getNames().toString());
@@ -59,28 +69,28 @@ public abstract class DataBaseManagerTest {
     public void testClearTable() {
         Data data = new DataImpl();
         data.put("id", 8);
-        jdbcDBManager.insertData("user", data);
-        jdbcDBManager.clearTable("user");
-        List<Data> dataAfterClearing = jdbcDBManager.getTableData("user");
+        manager.insertData("user", data);
+        manager.clearTable("user");
+        List<Data> dataAfterClearing = manager.getTableData("user");
         assertEquals(0, dataAfterClearing.size());
     }
 
     @Test
     public void testDropTable() {
         String data = "id numeric, name text, age numeric";
-        jdbcDBManager.createTable("test", data);
-        jdbcDBManager.dropTable("test");
-        Set<String> tableNames = jdbcDBManager.getTableNames();
-        assertEquals("[user]", tableNames.toString());
+        manager.createTable("test", data);
+        manager.dropTable("test");
+        Set<String> tableNames = manager.getTableNames();
+        assertEquals("[]", tableNames.toString());
     }
 
     @Test
     public void testCreateTable() {
         String data = "id numeric, name text, age numeric";
-        jdbcDBManager.createTable("test", data);
-        Set<String> tableNames = jdbcDBManager.getTableNames();
+        manager.createTable("test", data);
+        Set<String> tableNames = manager.getTableNames();
         assertEquals("[user, test]", tableNames.toString());
-        jdbcDBManager.dropTable("test");
+        manager.dropTable("test");
     }
 
     @Test
@@ -89,9 +99,9 @@ public abstract class DataBaseManagerTest {
         data.put("id", 8);
         data.put("username", "dana");
         data.put("password", "qwerty");
-        jdbcDBManager.insertData("user", data);
+        manager.insertData("user", data);
 
-        List<Data> tableData = jdbcDBManager.getTableData("user");
+        List<Data> tableData = manager.getTableData("user");
         Data user = tableData.get(0);
 
         assertEquals("[id, username, password]", user.getNames().toString());
@@ -105,10 +115,10 @@ public abstract class DataBaseManagerTest {
         data.put("username", "dana");
         data.put("password", "qwerty");
 
-        jdbcDBManager.insertData("user", data);
-        jdbcDBManager.deleteRecord("user", "password", "qwerty");
+        manager.insertData("user", data);
+        manager.deleteRecord("user", "password", "qwerty");
 
-        List<Data> tableData = jdbcDBManager.getTableData("user");
+        List<Data> tableData = manager.getTableData("user");
 
         Data user = tableData.get(0);
 
@@ -122,11 +132,11 @@ public abstract class DataBaseManagerTest {
         data.put("id", 8);
         data.put("username", "dana");
         data.put("password", "qwerty");
-        jdbcDBManager.insertData("user", data);
+        manager.insertData("user", data);
 
-        jdbcDBManager.updateTable("user", "username = 'dana'", "password = '1234'");
+        manager.updateTable("user", "username = 'dana'", "password = '1234'");
 
-        List<Data> tableData = jdbcDBManager.getTableData("user");
+        List<Data> tableData = manager.getTableData("user");
         Data user = tableData.get(0);
 
         assertEquals("[id, username, password]", user.getNames().toString());

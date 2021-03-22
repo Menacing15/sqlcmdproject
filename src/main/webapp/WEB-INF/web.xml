@@ -19,22 +19,22 @@
 
     <servlet>
         <servlet-name>MainServlet</servlet-name>
-        <servlet-class>ua.alexander.sqlcmd.controller.web.MainServlet</servlet-class>
+        <servlet-class>ua.alexander.sqlcmd.controller.MainServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>FindServlet</servlet-name>
-        <servlet-class>ua.alexander.sqlcmd.controller.web.FindServlet</servlet-class>
+        <servlet-class>ua.alexander.sqlcmd.controller.FindServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>TablesServlet</servlet-name>
-        <servlet-class>ua.alexander.sqlcmd.controller.web.TablesServlet</servlet-class>
+        <servlet-class>ua.alexander.sqlcmd.controller.TablesServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>DropServlet</servlet-name>
-        <servlet-class>ua.alexander.sqlcmd.controller.web.DropServlet</servlet-class>
+        <servlet-class>ua.alexander.sqlcmd.controller.DropServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

@@ -1,4 +1,4 @@
-package ua.alexander.sqlcmd.controller.web;
+package ua.alexander.sqlcmd.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
