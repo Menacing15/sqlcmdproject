@@ -1,7 +1,12 @@
 package ua.alexander.sqlcmd.module;
 
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,24 +17,36 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public abstract class DataBaseManagerTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/test-applicationContext.xml"})
 
-    private static DataBaseManager manager;
+public class DataBaseManagerTest {
 
-    public abstract DataBaseManager getDataBaseManager();
+    @Autowired
+    private DataBaseManager manager;
 
-    @BeforeClass
-    public static void setup() {
-        try (FileReader fileReader = new FileReader("src\\main\\resources\\database.properties")) {
+    public  void setManager(DataBaseManager manager) {
+        this.manager = manager;
+    }
+
+    @Before
+    public  void setup() {
+        try (FileReader fileReader = new FileReader("src\\test\\resources\\database.properties")) {
             Properties properties = new Properties();
             properties.load(fileReader);
             String database = properties.getProperty("databaseName");
             String user = properties.getProperty("user");
             String password = properties.getProperty("password");
             manager.connect(database, user, password);
+            manager.createTable("test", "id numeric, name text, password text");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @After
+    public void clean() {
+        manager.dropTable("test");
     }
 
     @Test
@@ -39,107 +56,141 @@ public abstract class DataBaseManagerTest {
 
     @Test
     public void testGetTableNames() {
+        //when
         Set<String> tableNames = manager.getTableNames();
+
+        //then
         System.out.println(tableNames);
-        assertEquals("[]", tableNames.toString());
+        assertEquals("[test]", tableNames.toString());
     }
 
     @Test
     public void testGetTableColumnNames() {
-        Set<String> columnNames = manager.getTableColumnNames("user");
-        assertEquals("[id, username, password]", columnNames.toString());
+        Set<String> columnNames = manager.getTableColumnNames("test");
+        assertEquals("[id, name, password]", columnNames.toString());
     }
 
     @Test
     public void testGetTableData() {
+        //given
         Data data = new DataImpl();
         data.put("id", 8);
-        data.put("username", "dana");
+        data.put("name", "dana");
         data.put("password", "qwerty");
-        manager.insertData("user", data);
 
-        List<Data> users = manager.getTableData("user");
+        //when
+        manager.insertData("test", data);
+        List<Data> users = manager.getTableData("test");
         Data user = users.get(0);
 
-        assertEquals("[id, username, password]", user.getNames().toString());
+        //then
+        System.out.println(user.toString());
+        assertEquals("[id, name, password]", user.getNames().toString());
         assertEquals("[8, dana, qwerty]", user.getValues().toString());
     }
 
     @Test
     public void testClearTable() {
+        //given
         Data data = new DataImpl();
         data.put("id", 8);
-        manager.insertData("user", data);
-        manager.clearTable("user");
-        List<Data> dataAfterClearing = manager.getTableData("user");
+
+        //when
+        manager.insertData("test", data);
+        manager.clearTable("test");
+
+        //then
+        List<Data> dataAfterClearing = manager.getTableData("test");
         assertEquals(0, dataAfterClearing.size());
     }
 
     @Test
     public void testDropTable() {
+        //given
         String data = "id numeric, name text, age numeric";
-        manager.createTable("test", data);
-        manager.dropTable("test");
+
+        //when
+        manager.createTable("test2", data);
+        manager.dropTable("test2");
+
+        //then
         Set<String> tableNames = manager.getTableNames();
-        assertEquals("[]", tableNames.toString());
+        System.out.println(tableNames);
+        assertEquals("[test]", tableNames.toString());
     }
 
     @Test
     public void testCreateTable() {
+        //given
         String data = "id numeric, name text, age numeric";
-        manager.createTable("test", data);
+
+        //when
+        manager.createTable("test2", data);
+
+        //then
         Set<String> tableNames = manager.getTableNames();
-        assertEquals("[user, test]", tableNames.toString());
-        manager.dropTable("test");
+        System.out.println(tableNames);
+        assertEquals("[test, test2]", tableNames.toString());
+        manager.dropTable("test2");
     }
 
     @Test
     public void testInsertData() {
+        //given
         Data data = new DataImpl();
         data.put("id", 8);
-        data.put("username", "dana");
+        data.put("name", "dana");
         data.put("password", "qwerty");
-        manager.insertData("user", data);
 
-        List<Data> tableData = manager.getTableData("user");
+        //when
+        manager.insertData("test", data);
+
+        //then
+        List<Data> tableData = manager.getTableData("test");
         Data user = tableData.get(0);
-
-        assertEquals("[id, username, password]", user.getNames().toString());
+        System.out.println(user);
+        assertEquals("[id, name, password]", user.getNames().toString());
         assertEquals("[8, dana, qwerty]", user.getValues().toString());
     }
 
     @Test
     public void testDeleteRecord() {
+        //given
         Data data = new DataImpl();
         data.put("id", 8);
-        data.put("username", "dana");
+        data.put("name", "dana");
         data.put("password", "qwerty");
 
-        manager.insertData("user", data);
-        manager.deleteRecord("user", "password", "qwerty");
+        //when
+        manager.insertData("test", data);
+        manager.deleteRecord("test", "password", "qwerty");
 
-        List<Data> tableData = manager.getTableData("user");
 
+        //then
+        List<Data> tableData = manager.getTableData("test");
         Data user = tableData.get(0);
-
-        assertEquals("[id, username, password]", user.getNames().toString());
+        System.out.println(user);
+        assertEquals("[id, name, password]", user.getNames().toString());
         assertEquals("[8, dana, ]", user.getValues().toString());
     }
 
     @Test
     public void testUpdateTable() {
+        //given
         Data data = new DataImpl();
         data.put("id", 8);
-        data.put("username", "dana");
+        data.put("name", "dana");
         data.put("password", "qwerty");
-        manager.insertData("user", data);
 
-        manager.updateTable("user", "username = 'dana'", "password = '1234'");
+        //when
+        manager.insertData("test", data);
+        manager.updateTable("test", "name = 'dana'", "password = '1234'");
 
-        List<Data> tableData = manager.getTableData("user");
+        //then
+        List<Data> tableData = manager.getTableData("test");
         Data user = tableData.get(0);
-
-        assertEquals("[id, username, password]", user.getNames().toString());
+        System.out.println( user);
+        assertEquals("[id, name, password]", user.getNames().toString());
         assertEquals("[8, dana, 1234]", user.getValues().toString());
     }
 }

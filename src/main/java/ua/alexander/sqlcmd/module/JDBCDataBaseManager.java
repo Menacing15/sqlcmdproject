@@ -59,8 +59,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
         List<Data> output = new ArrayList<>();
         String query = "SELECT * FROM public." + tableName;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, tableName);
-            ResultSet resultSet = statement.executeQuery(query);
+            ResultSet resultSet = statement.executeQuery();
             ResultSetMetaData resultSetMD = resultSet.getMetaData();
             while (resultSet.next()) {
                 Data data = new DataImpl();
@@ -99,9 +98,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public void createTable(String tableName, String data) {
-        String query = "CREATE TABLE public." + tableName + "(?)";
+        String query = "CREATE TABLE public." + tableName + "(" + data + ");";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, data);
             statement.executeUpdate();
         } catch (SQLException e) {
             String[] message = e.getMessage().split("[\n]");
@@ -110,12 +108,10 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     public void insertData(String tableName, Data input) {
-        String query = "INSERT INTO public." + tableName + "(?)VALUES (?)";
         String tableNames = formatNames(input);
         String values = formatValues(input);
+        String query = "INSERT INTO public." + tableName + "(" + tableNames + ")VALUES (" + values +")";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, tableNames);
-            statement.setString(2, values);
             statement.executeUpdate();
         } catch (SQLException e) {
             String[] message = e.getMessage().split("[\n]");
@@ -126,11 +122,9 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public void deleteRecord(String tableName, String columnName, String value) {
-        String query = "UPDATE public." + tableName + " SET ? = '' WHERE ? = ?";
+        String query = "UPDATE public." + tableName + " SET " + columnName + " = '' WHERE " + columnName + " = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, columnName);
-            statement.setString(2, columnName);
-            statement.setString(3, value);
+            statement.setString(1, value);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
@@ -139,10 +133,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
 
     @Override
     public void updateTable(String tableName, String checkValue, String newValue) {
-        String query = "UPDATE public." + tableName + " SET ? WHERE ?";
+        String query = "UPDATE public." + tableName + " SET " + newValue + " WHERE " + checkValue ;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, checkValue);
-            statement.setString(2, newValue);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
