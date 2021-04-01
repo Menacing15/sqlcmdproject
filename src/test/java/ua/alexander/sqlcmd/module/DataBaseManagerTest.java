@@ -25,18 +25,22 @@ public class DataBaseManagerTest {
     @Autowired
     private DataBaseManager manager;
 
+    private String database;
+    private String user;
+    private String password;
+
     public  void setManager(DataBaseManager manager) {
         this.manager = manager;
     }
 
     @Before
-    public  void setup() {
+    public void setup() {
         try (FileReader fileReader = new FileReader("src\\test\\resources\\database.properties")) {
             Properties properties = new Properties();
             properties.load(fileReader);
-            String database = properties.getProperty("databaseName");
-            String user = properties.getProperty("user");
-            String password = properties.getProperty("password");
+            database = properties.getProperty("databaseName");
+            user = properties.getProperty("user");
+            password = properties.getProperty("password");
             manager.connect(database, user, password);
             manager.createTable("test", "id numeric, name text, password text");
         } catch (IOException e) {
@@ -46,12 +50,18 @@ public class DataBaseManagerTest {
 
     @After
     public void clean() {
+        manager.connect(database, user, password);
         manager.dropTable("test");
     }
 
     @Test
     public void testIsConnected() {
         assertTrue(manager.isConnected());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testConnectBadParam() {
+        manager.connect("sqlcmd", "postgres", "wrongpassword");
     }
 
     @Test
